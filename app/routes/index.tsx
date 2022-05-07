@@ -1,100 +1,122 @@
-import type { MetaFunction, LoaderFunction } from "remix";
-import { useLoaderData, json, Link } from "remix";
+import type { LoaderFunction } from "@remix-run/node";
+import { Form, useLoaderData, useTransition } from "@remix-run/react";
+import type { Session } from "remix-auth-spotify";
+import { spotifyStrategy } from "~/models/auth.server";
+import { logout } from "../session.server";
+import type { CurrentlyPlaying } from "spotify-types";
 
-type IndexData = {
-  resources: Array<{ name: string; url: string }>;
-  demos: Array<{ name: string; to: string }>;
-};
+import { currentlyPlaying } from "~/service/spotify.api.server";
+import { Track } from "~/components/track";
+import { MiniForm } from "~/components/MiniForm";
+export interface LoaderOutput {
+  session: Session;
+  current: CurrentlyPlaying | null;
+  playlistId: string | undefined;
+  build: string | undefined;
+}
+export const loader: LoaderFunction = async ({ request }) => {
+  const session = await spotifyStrategy.getSession(request);
+  const build = process.env.BUILD;
+  const url = new URL(request.url);
+  const playlistId = url.searchParams.get("playlistId");
 
-// Loaders provide data to components and are only ever called on the server, so
-// you can connect to a database or run any server side code you want right next
-// to the component that renders it.
-// https://remix.run/api/conventions#loader
-export let loader: LoaderFunction = () => {
-  let data: IndexData = {
-    resources: [
-      {
-        name: "Remix Docs",
-        url: "https://remix.run/docs"
-      },
-      {
-        name: "React Router Docs",
-        url: "https://reactrouter.com/docs"
-      },
-      {
-        name: "Remix Discord",
-        url: "https://discord.gg/VBePs6d"
-      }
-    ],
-    demos: [
-      {
-        to: "demos/actions",
-        name: "Actions"
-      },
-      {
-        to: "demos/about",
-        name: "Nested Routes, CSS loading/unloading"
-      },
-      {
-        to: "demos/params",
-        name: "URL Params and Error Boundaries"
-      }
-    ]
-  };
+  const current = session?.accessToken
+    ? await currentlyPlaying(session.accessToken)
+    : null;
 
-  // https://remix.run/api/remix#json
-  return json(data);
-};
+  if (current?.error?.status === 401) {
+    return await logout(request);
+  }
 
-// https://remix.run/api/conventions#meta
-export let meta: MetaFunction = () => {
   return {
-    title: "Remix Starter",
-    description: "Welcome to remix!"
+    session,
+    current,
+    playlistId,
+    build,
   };
 };
 
-// https://remix.run/guides/routing#index-routes
 export default function Index() {
-  let data = useLoaderData<IndexData>();
+  const { session, current, playlistId, build } = useLoaderData<LoaderOutput>();
+  const user = session?.user;
+  const transition = useTransition();
+  const isSubmitting = transition.state === "submitting";
 
   return (
-    <div className="remix__page">
-      <main>
-        <h2>Welcome to Remix!</h2>
-        <p>We're stoked that you're here. 🥳</p>
-        <p>
-          Feel free to take a look around the code to see how Remix does things,
-          it might be a bit different than what you’re used to. When you're
-          ready to dive deeper, we've got plenty of resources to get you
-          up-and-running quickly.
-        </p>
-        <p>
-          Check out all the demos in this starter, and then just delete the{" "}
-          <code>app/routes/demos</code> and <code>app/styles/demos</code>{" "}
-          folders when you're ready to turn this into your next project.
-        </p>
+    <div className="flex justify-center p-8">
+      <main className="w-full max-w-3xl">
+        <div className="flex items-center justify-between space-x-4">
+          <h1 className="font-light text-slate-900  dark:text-slate-50">
+            S2ap
+          </h1>
+          {user ? (
+            <div className="flex items-center space-x-4">
+              <a
+                href="/"
+                className="dark:text-sky-40 tracking-tight text-sky-500 hover:text-sky-200"
+              >
+                Reload
+              </a>
+
+              <MiniForm action="/logout">
+                <button
+                  className="dark:text-sky-40 tracking-tight text-sky-500 hover:text-sky-200"
+                  type="submit"
+                >
+                  Logout
+                </button>
+              </MiniForm>
+            </div>
+          ) : (
+            ""
+          )}{" "}
+        </div>
+        {!user ? (
+          <Form action="/authorize/spotify" method="post">
+            <button className=" dark:text-sky-40 tracking-tight tracking-tight text-sky-500 hover:text-sky-200 sm:text-4xl">
+              Log in with Spotify
+            </button>
+          </Form>
+        ) : (
+          <>
+            <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50 sm:text-4xl ">
+              Hello{" "}
+              {user ? (
+                <strong className="font-extrabold">{user.name}!</strong>
+              ) : (
+                ""
+              )}{" "}
+              👋
+            </h1>
+            {current?.is_playing ? (
+              <Track
+                current={current}
+                isSubmitting={isSubmitting}
+                user={user}
+                playlistId={playlistId}
+              />
+            ) : (
+              <div>
+                <p className="py-8 text-slate-900 dark:text-slate-50">
+                  🙉 Play something in Spotify and then{" "}
+                  <a
+                    href="/"
+                    className="dark:text-sky-40 font-bold tracking-tight text-sky-500 "
+                  >
+                    reload
+                  </a>{" "}
+                  this page
+                </p>
+              </div>
+            )}
+          </>
+        )}
+        {build ? (
+          <small className="mt-16 mb-8 block bg-slate-900 text-right text-xs text-slate-800 ">
+            {build}
+          </small>
+        ) : null}
       </main>
-      <aside>
-        <h2>Demos In This App</h2>
-        <ul>
-          {data.demos.map(demo => (
-            <li key={demo.to} className="remix__page__resource">
-              <Link to={demo.to} prefetch="intent">
-                {demo.name}
-              </Link>
-            </li>
-          ))}
-        </ul>
-        <h2>Resources</h2>
-        <ul>
-          {data.resources.map(resource => (
-            <li key={resource.url} className="remix__page__resource">
-              <a href={resource.url}>{resource.name}</a>
-            </li>
-          ))}
-        </ul>
-      </aside>
     </div>
   );
 }
