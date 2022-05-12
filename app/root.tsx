@@ -27,6 +27,7 @@ export default function App() {
       <head>
         <Meta />
         <Links />
+        <base href="https://www.oakenfold.app/s2ap/"></base>
       </head>
       <body
         className="h-full bg-white text-slate-500 antialiased dark:bg-slate-900 dark:text-slate-400"
