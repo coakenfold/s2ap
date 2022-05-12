@@ -72,12 +72,11 @@ export default function Index() {
           )}{" "}
         </div>
         {!user ? (
-          <a
-            href="authorize/spotify"
-            className=" dark:text-sky-40 tracking-tight tracking-tight text-sky-500 hover:text-sky-200 sm:text-4xl"
-          >
-            Log in with Spotify
-          </a>
+          <Form action="authorize/spotify" method="post">
+            <button className=" dark:text-sky-40 tracking-tight tracking-tight text-sky-500 hover:text-sky-200 sm:text-4xl">
+              Log in with Spotify
+            </button>
+          </Form>
         ) : (
           <>
             <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50 sm:text-4xl ">
