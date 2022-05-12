@@ -58,7 +58,7 @@ export default function Index() {
                 Reload
               </a>
 
-              <MiniForm action="/logout">
+              <MiniForm action="logout">
                 <button
                   className="dark:text-sky-40 tracking-tight text-sky-500 hover:text-sky-200"
                   type="submit"
@@ -72,7 +72,7 @@ export default function Index() {
           )}{" "}
         </div>
         {!user ? (
-          <Form action="/authorize/spotify" method="post">
+          <Form action="authorize/spotify" method="post">
             <button className=" dark:text-sky-40 tracking-tight tracking-tight text-sky-500 hover:text-sky-200 sm:text-4xl">
               Log in with Spotify
             </button>
