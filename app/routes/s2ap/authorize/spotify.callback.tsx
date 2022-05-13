@@ -3,7 +3,7 @@ import { authenticator } from "~/models/auth.server";
 
 export const loader: LoaderFunction = ({ request }) => {
   return authenticator.authenticate("spotify", request, {
-    successRedirect: "/s2ap",
-    failureRedirect: "/s2ap",
+    successRedirect: "/s2ap?status=success",
+    failureRedirect: "/s2ap?status=error",
   });
 };
