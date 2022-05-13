@@ -118,7 +118,7 @@ export const action: ActionFunction = async ({ request }) => {
       const urlParam = output?.success
         ? `?playlistId=${output.playlistId}`
         : "";
-      return redirect(`/${urlParam}`);
+      return redirect(`/s2ap${urlParam}`);
     }
   }
 };
