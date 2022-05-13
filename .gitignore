@@ -4,9 +4,9 @@ node_modules
 .vercel
 
 public/build
-public/s2ap
+public/build.s2ap
 api/_build
 build
-s2ap
+build.s2ap
 
 .env
