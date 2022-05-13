@@ -7,5 +7,5 @@ module.exports = {
   appDirectory: "app",
   browserBuildDirectory: "public/build.s2ap",
   publicPath: "/build.s2ap/",
-  serverBuildDirectory: "api/_build.s2ap",
+  serverBuildDirectory: "api/_buildS2ap",
 };
