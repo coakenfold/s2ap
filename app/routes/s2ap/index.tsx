@@ -38,6 +38,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export default function Index() {
   const { session, current, playlistId, build } = useLoaderData<LoaderOutput>();
+  console.log("debug", { session, current, playlistId, build });
   const user = session?.user;
   const transition = useTransition();
   const isSubmitting = transition.state === "submitting";
