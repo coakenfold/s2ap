@@ -56,7 +56,7 @@ export function Track({ isSubmitting, current, user, playlistId }: TrackInput) {
       {user && current && isSongFromAlbum ? (
         <div className="py-4">
           <MiniForm
-            action="/create"
+            action="/s2ap/create"
             method="post"
             inputs={[
               { name: "userId", value: user.id },
@@ -83,7 +83,7 @@ export function Track({ isSubmitting, current, user, playlistId }: TrackInput) {
             {albumTracks > 1 ? "tracks" : "track"}
           </div>
           <MiniForm
-            action="/create"
+            action="/s2ap/create"
             method="post"
             inputs={[
               { name: "userId", value: user.id },

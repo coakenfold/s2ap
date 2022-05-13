@@ -21,7 +21,7 @@ function getUserSession(request: Request) {
 }
 export async function logout(request: Request) {
   const session = await getUserSession(request);
-  return redirect("/", {
+  return redirect("/s2ap", {
     headers: {
       "Set-Cookie": await sessionStorage.destroySession(session),
     },
