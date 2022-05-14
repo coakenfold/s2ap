@@ -16,6 +16,7 @@ export interface LoaderOutput {
 }
 export const loader: LoaderFunction = async ({ request }) => {
   const session = await spotifyStrategy.getSession(request);
+  console.log("request", request);
   const build = process.env.BUILD;
   const url = new URL(request.url);
   const playlistId = url.searchParams.get("playlistId");
