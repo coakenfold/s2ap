@@ -16,6 +16,8 @@ export interface LoaderOutput {
 }
 export const loader: LoaderFunction = async ({ request }) => {
   const session = await spotifyStrategy.getSession(request);
+  // let error = session.get(authenticator.sessionErrorKey);
+  console.log("session", session);
   console.log("request", request);
   const build = process.env.BUILD;
   const url = new URL(request.url);
