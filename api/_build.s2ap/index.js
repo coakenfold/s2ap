@@ -211,8 +211,7 @@ authenticator.use(spotifyStrategy);
 // route:/Users/chadoakenfold/Documents/Code/SongToAlbumPlaylist/Code/s2ap-vercel/app/routes/s2ap/authorize/spotify.callback.tsx
 var loader = ({ request }) => {
   return authenticator.authenticate("spotify", request, {
-    successRedirect: "/s2ap?status=success",
-    failureRedirect: "/s2ap?status=error"
+    successRedirect: "/s2ap?status=success"
   });
 };
 
