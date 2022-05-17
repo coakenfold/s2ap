@@ -16,9 +16,6 @@ export interface LoaderOutput {
 }
 export const loader: LoaderFunction = async ({ request }) => {
   const session = await spotifyStrategy.getSession(request);
-  // let error = session.get(authenticator.sessionErrorKey);
-  console.log("session", session);
-  console.log("request", request);
   const build = process.env.BUILD;
   const url = new URL(request.url);
   const playlistId = url.searchParams.get("playlistId");
@@ -41,7 +38,6 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export default function Index() {
   const { session, current, playlistId, build } = useLoaderData<LoaderOutput>();
-  console.log("debug", { session, current, playlistId, build });
   const user = session?.user;
   const transition = useTransition();
   const isSubmitting = transition.state === "submitting";
@@ -51,7 +47,7 @@ export default function Index() {
       <main className="w-full max-w-3xl">
         <div className="flex items-center justify-between space-x-4">
           <h1 className="font-light text-slate-900  dark:text-slate-50">
-            S2ap.
+            S2ap
           </h1>
           {user ? (
             <div className="flex items-center space-x-4">
