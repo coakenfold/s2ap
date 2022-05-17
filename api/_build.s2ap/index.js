@@ -132,6 +132,7 @@ var import_tiny_invariant2 = __toESM(require("tiny-invariant"));
 var import_client = require("@prisma/client");
 var db;
 if (false) {
+  console.log("db.server > production");
   db = new import_client.PrismaClient();
 } else {
   if (!global.__db) {
@@ -146,19 +147,6 @@ async function getUserBySpotifyId(spotifyId) {
 }
 async function getAllUsers() {
   return db.user.findMany();
-}
-async function createUser({
-  email,
-  displayName,
-  spotifyId
-}) {
-  return db.user.create({
-    data: {
-      email,
-      displayName,
-      spotifyId
-    }
-  });
 }
 async function deleteUserBySpotifyId(spotifyId) {
   return db.user.delete({ where: { spotifyId } });
@@ -183,23 +171,18 @@ var spotifyStrategy = new import_remix_auth_spotify.SpotifyStrategy({
   sessionStorage,
   scope: scopes
 }, async ({ accessToken, refreshToken, extraParams, profile }) => {
+  console.log("TEST: getUserBySpotifyId 1");
   let user = await getUserBySpotifyId(profile.id);
-  if (!user) {
-    user = await createUser({
-      email: profile.__json.email,
-      displayName: profile.displayName,
-      spotifyId: profile.id
-    });
-  }
+  console.log("TEST: getUserBySpotifyId 2");
   return {
     accessToken,
     refreshToken,
     expiresAt: Date.now() + extraParams.expiresIn * 1e3,
     tokenType: extraParams.tokenType,
     user: {
-      id: user.spotifyId,
-      email: user.email,
-      name: user.displayName
+      id: user ? user.spotifyId : "",
+      email: user ? user.email : "",
+      name: user ? user.displayName : ""
     }
   };
 });

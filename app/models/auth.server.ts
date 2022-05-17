@@ -34,14 +34,16 @@ export const spotifyStrategy = new SpotifyStrategy(
   },
   async ({ accessToken, refreshToken, extraParams, profile }) => {
     // Get/Create user
+    console.log("TEST: getUserBySpotifyId 1");
     let user = await getUserBySpotifyId(profile.id);
-    if (!user) {
-      user = await createUser({
-        email: profile.__json.email,
-        displayName: profile.displayName,
-        spotifyId: profile.id,
-      });
-    }
+    console.log("TEST: getUserBySpotifyId 2");
+    // if (!user) {
+    //   user = await createUser({
+    //     email: profile.__json.email,
+    //     displayName: profile.displayName,
+    //     spotifyId: profile.id,
+    //   });
+    // }
 
     return {
       accessToken,
@@ -49,9 +51,9 @@ export const spotifyStrategy = new SpotifyStrategy(
       expiresAt: Date.now() + extraParams.expiresIn * 1000,
       tokenType: extraParams.tokenType,
       user: {
-        id: user.spotifyId,
-        email: user.email,
-        name: user.displayName,
+        id: user ? user.spotifyId : "",
+        email: user ? user.email : "",
+        name: user ? user.displayName : "",
       },
     };
   }
