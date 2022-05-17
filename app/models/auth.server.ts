@@ -34,16 +34,16 @@ export const spotifyStrategy = new SpotifyStrategy(
   },
   async ({ accessToken, refreshToken, extraParams, profile }) => {
     // Get/Create user
-    console.log("TEST: getUserBySpotifyId 1");
+    console.log("🥰🥰🥰🥰🥰 getUserBySpotifyId 1");
     let user = await getUserBySpotifyId(profile.id);
-    console.log("TEST: getUserBySpotifyId 2");
-    // if (!user) {
-    //   user = await createUser({
-    //     email: profile.__json.email,
-    //     displayName: profile.displayName,
-    //     spotifyId: profile.id,
-    //   });
-    // }
+    console.log("🥰🥰🥰🥰🥰 getUserBySpotifyId 2");
+    if (!user) {
+      user = await createUser({
+        email: profile.__json.email,
+        displayName: profile.displayName,
+        spotifyId: profile.id,
+      });
+    }
 
     return {
       accessToken,

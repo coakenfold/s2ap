@@ -143,10 +143,27 @@ if (false) {
 
 // app/models/user.server.ts
 async function getUserBySpotifyId(spotifyId) {
+  const b = await db.user.findUnique({ where: { email: "web@oakenfold.ca" } });
+  console.log("\u{1F970}\u{1F970}\u{1F970}\u{1F970}\u{1F970} getUserBySpotifyId b", b);
+  const a = await db.user.findUnique({ where: { spotifyId } });
+  console.log("\u{1F970}\u{1F970}\u{1F970}\u{1F970}\u{1F970} getUserBySpotifyId a", a);
   return db.user.findUnique({ where: { spotifyId } });
 }
 async function getAllUsers() {
   return db.user.findMany();
+}
+async function createUser({
+  email,
+  displayName,
+  spotifyId
+}) {
+  return db.user.create({
+    data: {
+      email,
+      displayName,
+      spotifyId
+    }
+  });
 }
 async function deleteUserBySpotifyId(spotifyId) {
   return db.user.delete({ where: { spotifyId } });
@@ -171,9 +188,16 @@ var spotifyStrategy = new import_remix_auth_spotify.SpotifyStrategy({
   sessionStorage,
   scope: scopes
 }, async ({ accessToken, refreshToken, extraParams, profile }) => {
-  console.log("TEST: getUserBySpotifyId 1");
+  console.log("\u{1F970}\u{1F970}\u{1F970}\u{1F970}\u{1F970} getUserBySpotifyId 1");
   let user = await getUserBySpotifyId(profile.id);
-  console.log("TEST: getUserBySpotifyId 2");
+  console.log("\u{1F970}\u{1F970}\u{1F970}\u{1F970}\u{1F970} getUserBySpotifyId 2");
+  if (!user) {
+    user = await createUser({
+      email: profile.__json.email,
+      displayName: profile.displayName,
+      spotifyId: profile.id
+    });
+  }
   return {
     accessToken,
     refreshToken,
