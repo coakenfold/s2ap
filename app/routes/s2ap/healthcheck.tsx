@@ -1,7 +1,37 @@
-// learn more: https://fly.io/docs/reference/configuration/#services-http_checks
 import type { LoaderFunction } from "@remix-run/node";
 
 import { db } from "~/service/db.server";
+
+export const requiredEnvVars = () => {
+  return new Promise((resolve, reject) => {
+    const requiredEnvs = [
+      "DATABASE_URL",
+      "SESSION_SECRET",
+      "SPOTIFY_CLIENT_ID",
+      "SPOTIFY_CLIENT_SECRET",
+      "SPOTIFY_CALLBACK_URL",
+    ];
+    interface RequiredEnvAccumulator {
+      name: string;
+      message: string;
+    }
+    const reducedRequiredEnvs = requiredEnvs.reduce((accumulator, envName) => {
+      const envValue = process.env[envName];
+      if (envValue === undefined) {
+        accumulator.push({
+          name: envName,
+          message: `\`${envName}\` is undefined`,
+        });
+      }
+      return accumulator;
+    }, [] as RequiredEnvAccumulator[]);
+    if (reducedRequiredEnvs.length > 0) {
+      return reject(reducedRequiredEnvs);
+    }
+
+    return resolve(undefined);
+  });
+};
 
 export const loader: LoaderFunction = async ({ request }) => {
   const host =
@@ -9,14 +39,17 @@ export const loader: LoaderFunction = async ({ request }) => {
 
   try {
     const url = new URL("/", `http://${host}`);
-    // if we can connect to the database and make a simple query
-    // and make a HEAD request to ourselves, then we're good.
     await Promise.all([
+      // if the required env vars are set,
+      requiredEnvVars(),
+      // connect to the database to make a simple query,
       db.user.count(),
+      // and make a HEAD request to ourselves
       fetch(url.toString(), { method: "HEAD" }).then((r) => {
         if (!r.ok) return Promise.reject(r);
       }),
     ]);
+    // we should be good!
     return new Response("OK");
   } catch (error: unknown) {
     console.log("healthcheck ❌", { error });
