@@ -34,14 +34,7 @@ export const spotifyStrategy = new SpotifyStrategy(
   },
   async ({ accessToken, refreshToken, extraParams, profile }) => {
     // Get/Create user
-    console.log("🥰🥰🥰🥰🥰 getUserBySpotifyId 1", {
-      accessToken,
-      refreshToken,
-      extraParams,
-      profile,
-    });
     let user = await getUserBySpotifyId(profile.id);
-    console.log("🥰🥰🥰🥰🥰 getUserBySpotifyId 2");
     if (!user) {
       user = await createUser({
         email: profile.__json.email,

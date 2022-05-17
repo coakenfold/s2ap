@@ -5,9 +5,7 @@ export type { User } from "@prisma/client";
 
 export async function getUserBySpotifyId(spotifyId: User["spotifyId"]) {
   const b = await db.user.findUnique({ where: { email: "web@oakenfold.ca" } });
-  console.log("🥰🥰🥰🥰🥰 getUserBySpotifyId b", b);
   const a = await db.user.findUnique({ where: { spotifyId } });
-  console.log("🥰🥰🥰🥰🥰 getUserBySpotifyId a", a);
   return db.user.findUnique({ where: { spotifyId } });
 }
 export async function getAllUsers() {
