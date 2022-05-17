@@ -7,3 +7,11 @@ export const loader: LoaderFunction = ({ request }) => {
     // failureRedirect: "/s2ap?status=error",
   });
 };
+
+export default function SpotifyCallback() {
+  return (
+    <div className="flex justify-center p-8">
+      s2ap/authorize/spotify/callback
+    </div>
+  );
+}
