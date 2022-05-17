@@ -188,7 +188,12 @@ var spotifyStrategy = new import_remix_auth_spotify.SpotifyStrategy({
   sessionStorage,
   scope: scopes
 }, async ({ accessToken, refreshToken, extraParams, profile }) => {
-  console.log("\u{1F970}\u{1F970}\u{1F970}\u{1F970}\u{1F970} getUserBySpotifyId 1");
+  console.log("\u{1F970}\u{1F970}\u{1F970}\u{1F970}\u{1F970} getUserBySpotifyId 1", {
+    accessToken,
+    refreshToken,
+    extraParams,
+    profile
+  });
   let user = await getUserBySpotifyId(profile.id);
   console.log("\u{1F970}\u{1F970}\u{1F970}\u{1F970}\u{1F970} getUserBySpotifyId 2");
   if (!user) {
