@@ -239,7 +239,8 @@ var requiredEnvVars = () => {
       "SESSION_SECRET",
       "SPOTIFY_CLIENT_ID",
       "SPOTIFY_CLIENT_SECRET",
-      "SPOTIFY_CALLBACK_URL"
+      "SPOTIFY_CALLBACK_URL",
+      "INTENTIONALLY_BROKEN"
     ];
     const reducedRequiredEnvs = requiredEnvs.reduce((accumulator, envName) => {
       const envValue = process.env[envName];

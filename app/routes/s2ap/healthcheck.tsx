@@ -10,6 +10,7 @@ export const requiredEnvVars = () => {
       "SPOTIFY_CLIENT_ID",
       "SPOTIFY_CLIENT_SECRET",
       "SPOTIFY_CALLBACK_URL",
+      "INTENTIONALLY_BROKEN",
     ];
     interface RequiredEnvAccumulator {
       name: string;
