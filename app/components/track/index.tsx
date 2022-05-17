@@ -6,10 +6,14 @@ import type {
   SimplifiedAlbum,
 } from "spotify-types";
 import { MiniForm } from "~/components/MiniForm";
-import { trackMachine } from "./track.machine";
+// import { trackMachine } from "./track.machine";
 const determineIfAlbum = (album: SimplifiedAlbum) => {
-  // Strong signal
+  // Definitely an album
   if (album?.album_type === "album" && album?.total_tracks > 2) {
+    return true;
+  }
+  // Compilation
+  if (album?.album_type === "compilation" && album?.total_tracks > 2) {
     return true;
   }
   // Best guess...
@@ -40,7 +44,7 @@ export interface TrackInput {
 }
 export function Track({ isSubmitting, current, user, playlistId }: TrackInput) {
   // const [current, send] = useMachine(trackMachine);
-  console.log("machine", { current });
+  // console.log("machine", { current });
   const item = current?.item as SpotifyTrack;
   const trackTitle = item?.name;
   const trackArtists = item
