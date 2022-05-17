@@ -244,6 +244,10 @@ var requiredEnvVars = () => {
     ];
     const reducedRequiredEnvs = requiredEnvs.reduce((accumulator, envName) => {
       const envValue = process.env[envName];
+      console.log({
+        name: envName,
+        value: envValue
+      });
       if (envValue === void 0) {
         accumulator.push({
           name: envName,
