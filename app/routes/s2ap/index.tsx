@@ -46,7 +46,10 @@ export default function Index() {
     <div className="flex justify-center p-8">
       <main className="w-full max-w-3xl">
         <div className="flex items-center justify-between space-x-4">
-          <h1 className="font-light text-slate-900  dark:text-slate-50">
+          <h1
+            className="font-light text-slate-900  dark:text-slate-50"
+            title="Song to Album Playlist"
+          >
             S2ap
           </h1>
           {user ? (

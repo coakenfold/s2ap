@@ -645,7 +645,8 @@ function Index() {
   }, /* @__PURE__ */ React.createElement("div", {
     className: "flex items-center justify-between space-x-4"
   }, /* @__PURE__ */ React.createElement("h1", {
-    className: "font-light text-slate-900  dark:text-slate-50"
+    className: "font-light text-slate-900  dark:text-slate-50",
+    title: "Song to Album Playlist"
   }, "S2ap"), user ? /* @__PURE__ */ React.createElement("div", {
     className: "flex items-center space-x-4"
   }, /* @__PURE__ */ React.createElement("a", {
@@ -683,16 +684,36 @@ function Index() {
 // route:/Users/chadoakenfold/Documents/Code/SongToAlbumPlaylist/Code/s2ap-vercel/app/routes/index.tsx
 var routes_exports = {};
 __export(routes_exports, {
-  default: () => Index2
+  default: () => Index2,
+  loader: () => loader7
 });
+var import_react6 = require("@remix-run/react");
+var loader7 = async ({ request }) => {
+  const build = process.env.BUILD;
+  return {
+    build
+  };
+};
 function Index2() {
-  return /* @__PURE__ */ React.createElement("a", {
-    href: "s2ap"
-  }, "S2ap");
+  const { build } = (0, import_react6.useLoaderData)();
+  return /* @__PURE__ */ React.createElement("div", {
+    className: "flex justify-center p-8"
+  }, /* @__PURE__ */ React.createElement("main", {
+    className: "w-full max-w-3xl"
+  }, /* @__PURE__ */ React.createElement("h1", {
+    className: "font-light text-slate-900  dark:text-slate-50",
+    title: "Song to Album Playlist"
+  }, "S2ap"), /* @__PURE__ */ React.createElement("a", {
+    href: "s2ap",
+    className: " dark:text-sky-40 tracking-tight tracking-tight text-sky-500 hover:text-sky-200 sm:text-4xl"
+  }, "When I listen to Spotify, often a song comes on that I dig and I click through to the album details. If it's an album (and not a single) I'll create a playlist that I add to an `In Coming` folder. This is too cumbersome \u2014 I created an app which has a button that does (almost*) all of the aforementioned steps, come see"), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("small", null, "* Currently, Spotify doesn't allow apps to create playlists inside of folders"), build ? /* @__PURE__ */ React.createElement("small", {
+    className: "mt-16 mb-8 block bg-slate-900 text-right text-xs text-slate-800 "
+  }, build) : null)));
 }
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
 var assets_manifest_default = { "version": "3c854c6f", "entry": { "module": "/build.s2ap/entry.client-POWKEXTE.js", "imports": ["/build.s2ap/_shared/chunk-DWSQRD4J.js", "/build.s2ap/_shared/chunk-6BO74FWO.js"] }, "routes": { "root": { "id": "root", "parentId": void 0, "path": "", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/root-QWDGGGAF.js", "imports": void 0, "hasAction": false, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/index": { "id": "routes/index", "parentId": "root", "path": void 0, "index": true, "caseSensitive": void 0, "module": "/build.s2ap/routes/index-S6BCNFMT.js", "imports": void 0, "hasAction": false, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/authorize/spotify": { "id": "routes/s2ap/authorize/spotify", "parentId": "root", "path": "s2ap/authorize/spotify", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/authorize/spotify-VUZYJC6T.js", "imports": void 0, "hasAction": true, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/authorize/spotify.callback": { "id": "routes/s2ap/authorize/spotify.callback", "parentId": "root", "path": "s2ap/authorize/spotify/callback", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/authorize/spotify.callback-626IVBA6.js", "imports": void 0, "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/create": { "id": "routes/s2ap/create", "parentId": "root", "path": "s2ap/create", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/create-T75RJAY4.js", "imports": ["/build.s2ap/_shared/chunk-ZVJXL2KF.js", "/build.s2ap/_shared/chunk-IX3USF6X.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/dashboard": { "id": "routes/s2ap/dashboard", "parentId": "root", "path": "s2ap/dashboard", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/dashboard-CLELNWCH.js", "imports": ["/build.s2ap/_shared/chunk-O7EGGWM3.js", "/build.s2ap/_shared/chunk-IX3USF6X.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/healthcheck": { "id": "routes/s2ap/healthcheck", "parentId": "root", "path": "s2ap/healthcheck", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/healthcheck-ZK63EQIF.js", "imports": void 0, "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/index": { "id": "routes/s2ap/index", "parentId": "root", "path": "s2ap", "index": true, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/index-LUW5QAAT.js", "imports": ["/build.s2ap/_shared/chunk-O7EGGWM3.js", "/build.s2ap/_shared/chunk-ZVJXL2KF.js", "/build.s2ap/_shared/chunk-IX3USF6X.js", "/build.s2ap/_shared/chunk-ME5PAYV3.js"], "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/logout": { "id": "routes/s2ap/logout", "parentId": "root", "path": "s2ap/logout", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/logout-7QTEXJ2U.js", "imports": ["/build.s2ap/_shared/chunk-ME5PAYV3.js"], "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false } }, "url": "/build.s2ap/manifest-3C854C6F.js" };
+
 
 // server-entry-module:@remix-run/dev/server-build
 var entry = { module: entry_server_exports };
