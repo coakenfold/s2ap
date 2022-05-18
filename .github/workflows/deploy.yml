@@ -7,6 +7,15 @@ on:
   pull_request: {}
 
 jobs:
+  run-sitespeed:
+    permissions: read-all
+    runs-on: ubuntu-latest
+    name: running sitespeed.io
+    steps:
+      - name: code checkout
+        uses: actions/checkout@v2
+      - name: running sitespeed.io container with arguments and optional Docker options
+        run: docker run -v "$(pwd):/sitespeed.io" sitespeedio/sitespeed.io:24.7.0 https://www.sitespeed.io --budget.configPath .github/performance.budget.json -n 1
   lint:
     permissions: read-all
     name: ⬣ ESLint
