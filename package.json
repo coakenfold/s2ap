@@ -28,8 +28,9 @@
   "prettier": {},
   "eslintIgnore": [
     "/node_modules",
-    "/build",
-    "/public/build"
+    "/build.s2ap",
+    "/public/build.s2ap",
+    "api/_build.s2ap"
   ],
   "dependencies": {
     "@prisma/client": "^3.11.1",
