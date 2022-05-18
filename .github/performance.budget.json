@@ -10,9 +10,9 @@
       "requests": 0
     },
     "score": {
-      "bestpractice": 100,
-      "privacy": 100,
-      "performance": 100
+      "bestpractice": 80,
+      "privacy": 80,
+      "performance": 80
     }
   }
 }
