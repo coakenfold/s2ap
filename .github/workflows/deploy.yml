@@ -10,11 +10,13 @@ jobs:
   run-sitespeed:
     permissions: read-all
     runs-on: ubuntu-latest
-    name: running sitespeed.io
+    name: 🏎️ sitespeed.io 🏁
     steps:
-      - name: code checkout
-        uses: actions/checkout@v2
-      - name: running sitespeed.io container with arguments and optional Docker options
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.9.1
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v3
+      - name: 🐳 Running sitespeed.io Docker container
         run: docker run -v "$(pwd):/sitespeed.io" sitespeedio/sitespeed.io:24.7.0 https://www.sitespeed.io --budget.configPath .github/performance.budget.json -n 1
   lint:
     permissions: read-all
