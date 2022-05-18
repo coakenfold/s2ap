@@ -20,7 +20,7 @@ export default function Index() {
           className="font-light text-slate-900  dark:text-slate-50"
           title="Song to Album Playlist"
         >
-          S2ap
+          S2ap!
         </h1>
 
         <a
