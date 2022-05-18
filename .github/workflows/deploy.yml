@@ -43,6 +43,7 @@ jobs:
         run: npm run lint
 
   typecheck:
+    permissions: read-all
     name: ʦ TypeScript
     runs-on: ubuntu-latest
     steps:
@@ -64,6 +65,7 @@ jobs:
         run: npm run typecheck --if-present
 
   vitest:
+    permissions: read-all
     name: ⚡ Vitest
     runs-on: ubuntu-latest
     steps:
@@ -85,6 +87,7 @@ jobs:
         run: npm run test -- --coverage
 
   cypress:
+    permissions: read-all
     name: ⚫️ Cypress
     runs-on: ubuntu-latest
     steps:

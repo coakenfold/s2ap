@@ -3,7 +3,6 @@ import { SPOTIFY_API } from "~/service/spotify.api.server";
 import {
   ALBUM,
   ALBUM_LIFE_ON_EARTH,
-  CURRENTLY_PLAYING,
   CURRENTLY_PLAYING_NIGHTQUEEN,
   ME,
   PLAYLIST_CREATE,

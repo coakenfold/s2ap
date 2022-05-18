@@ -27,14 +27,6 @@ const determineIfAlbum = (album: SimplifiedAlbum) => {
   // Nope
   return false;
 };
-interface PlaylistFormInput {
-  user: TrackInput["user"];
-  children?: JSX.Element;
-  isSubmitting: boolean;
-  albumId: string;
-  trackTitle: string;
-  albumTitle: string;
-}
 
 export interface TrackInput {
   isSubmitting: boolean;
