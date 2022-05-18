@@ -7,6 +7,20 @@ on:
   pull_request: {}
 
 jobs:
+  permissions:
+    actions: read-all|write-all
+    checks: read-all|write-all
+    contents: read-all|write-all
+    deployments: read-all|write-all
+    id-token: read-all|write-all
+    issues: read-all|write-all
+    discussions: read-all|write-all
+    packages: read-all|write-all
+    pages: read-all|write-all
+    pull-requests: read-all|write-all
+    repository-projects: read-all|write-all
+    security-events: read-all|write-all
+    statuses: read-all|write-all
   lint:
     name: ⬣ ESLint
     runs-on: ubuntu-latest
