@@ -66,7 +66,7 @@ __export(root_exports, {
 var import_react2 = require("@remix-run/react");
 
 // app/styles/tailwind.css
-var tailwind_default = "/build.s2ap/_assets/tailwind-CXMIP6W2.css";
+var tailwind_default = "/build.s2ap/_assets/tailwind-GHL7DXKH.css";
 
 // route:/Users/chadoakenfold/Documents/Code/SongToAlbumPlaylist/Code/s2ap-vercel/app/root.tsx
 var links = () => {
@@ -146,6 +146,9 @@ async function getUserBySpotifyId(spotifyId) {
 async function getAllUsers() {
   return db.user.findMany();
 }
+async function getUserByEmail(email) {
+  return db.user.findUnique({ where: { email } });
+}
 async function createUser({
   email,
   displayName,
@@ -161,6 +164,31 @@ async function createUser({
 }
 async function deleteUserBySpotifyId(spotifyId) {
   return db.user.delete({ where: { spotifyId } });
+}
+
+// app/models/account.server.ts
+async function createAccountWithSpotifyId({
+  spotifyId,
+  preferences
+}) {
+  return db.account.create({
+    data: {
+      spotifyId,
+      preferences
+    }
+  });
+}
+async function getAccountBySpotifyId(spotifyId) {
+  return db.account.findUnique({ where: { spotifyId } });
+}
+async function updateAccountBySpotifyId({
+  spotifyId,
+  data
+}) {
+  return db.account.update({
+    where: { spotifyId },
+    data: { preferences: data }
+  });
 }
 
 // app/models/auth.server.ts
@@ -189,6 +217,14 @@ var spotifyStrategy = new import_remix_auth_spotify.SpotifyStrategy({
       displayName: profile.displayName,
       spotifyId: profile.id
     });
+  }
+  let account = await getAccountBySpotifyId(profile.id);
+  if (!account) {
+    account = createAccountWithSpotifyId({
+      spotifyId: profile.id,
+      preferences: { newsletter: true }
+    });
+    console.log("!!!", account);
   }
   return {
     accessToken,
@@ -224,10 +260,241 @@ var action = async ({ request }) => {
   return await authenticator.authenticate("spotify", request);
 };
 
+// route:/Users/chadoakenfold/Documents/Code/SongToAlbumPlaylist/Code/s2ap-vercel/app/routes/s2ap/account/deleted.tsx
+var deleted_exports = {};
+__export(deleted_exports, {
+  default: () => Deleted
+});
+function Deleted() {
+  const subHeader = "sm:text-2xl text-2xl my-4 text-slate-900 dark:text-slate-50";
+  const header = "sm:text-4xl text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-50";
+  return /* @__PURE__ */ React.createElement("main", {
+    className: "mx-16 my-16"
+  }, /* @__PURE__ */ React.createElement("h1", {
+    className: "font-light text-slate-900  dark:text-slate-50",
+    title: "Song to Album Playlist"
+  }, "We deleted your account"), /* @__PURE__ */ React.createElement("h1", {
+    className: header
+  }, "Thanks for trying out ", /* @__PURE__ */ React.createElement("span", {
+    title: "Song to Album Playlist"
+  }, "S2ap"), "!"), /* @__PURE__ */ React.createElement("h2", {
+    className: subHeader
+  }, "Hope you'll come back and check us out again in the future"));
+}
+
+// route:/Users/chadoakenfold/Documents/Code/SongToAlbumPlaylist/Code/s2ap-vercel/app/routes/s2ap/admin/dashboard.tsx
+var dashboard_exports = {};
+__export(dashboard_exports, {
+  DASHBOARD_URL: () => DASHBOARD_URL,
+  action: () => action2,
+  default: () => Create,
+  loader: () => loader2
+});
+var import_node2 = require("@remix-run/node");
+var import_react4 = require("@remix-run/react");
+
+// app/components/MiniForm.tsx
+var import_react3 = require("@remix-run/react");
+var MiniForm = (MiniFormInput) => {
+  const {
+    isSubmitting = false,
+    children,
+    inputs,
+    action: action5,
+    method = "get",
+    keyPrefix
+  } = MiniFormInput;
+  return /* @__PURE__ */ React.createElement(import_react3.Form, {
+    action: action5,
+    method
+  }, /* @__PURE__ */ React.createElement("fieldset", {
+    disabled: isSubmitting
+  }, inputs ? inputs.map(({ name, value }) => {
+    return /* @__PURE__ */ React.createElement("input", {
+      type: "hidden",
+      name,
+      value,
+      key: `${keyPrefix ? keyPrefix : "MiniForm"}-${name}`
+    });
+  }) : null, children));
+};
+
+// route:/Users/chadoakenfold/Documents/Code/SongToAlbumPlaylist/Code/s2ap-vercel/app/routes/s2ap/admin/dashboard.tsx
+var loader2 = async ({ request }) => {
+  var _a;
+  const session = await spotifyStrategy.getSession(request);
+  if (((_a = session == null ? void 0 : session.user) == null ? void 0 : _a.id) !== "c_oak") {
+    return (0, import_node2.redirect)("/s2ap");
+  }
+  const users = await getAllUsers();
+  return users;
+};
+var DASHBOARD_URL = "/s2ap/admin/dashboard";
+var action2 = async ({ request }) => {
+  var _a;
+  const session = await spotifyStrategy.getSession(request);
+  if (session && ((_a = session == null ? void 0 : session.user) == null ? void 0 : _a.id) === "c_oak") {
+    const form = await request.formData();
+    const spotifyId = form.get("spotifyId");
+    if (spotifyId) {
+      const user = await getUserBySpotifyId(spotifyId);
+      if (user) {
+        const output = await deleteUserBySpotifyId(spotifyId);
+        const urlParam = (output == null ? void 0 : output.displayName) ? `?deleted=${output == null ? void 0 : output.displayName}` : "";
+        return (0, import_node2.redirect)(`${DASHBOARD_URL}${urlParam}`);
+      }
+      return (0, import_node2.redirect)(`${DASHBOARD_URL}?error=noUser`);
+    }
+  }
+};
+function Create() {
+  const users = (0, import_react4.useLoaderData)();
+  return /* @__PURE__ */ React.createElement("main", {
+    className: "mx-16 my-16"
+  }, /* @__PURE__ */ React.createElement("h1", {
+    className: "font-light text-slate-900 dark:text-slate-50"
+  }, "Dashboard"), users.map(({ displayName, email, spotifyId }) => {
+    return /* @__PURE__ */ React.createElement("div", {
+      key: spotifyId
+    }, displayName, " - ", email, " ", /* @__PURE__ */ React.createElement(MiniForm, {
+      isSubmitting: false,
+      method: "post",
+      inputs: [{ name: "spotifyId", value: spotifyId }]
+    }, /* @__PURE__ */ React.createElement("button", {
+      className: "dark:text-sky-40 font-bold tracking-tight text-sky-500 ",
+      type: "submit"
+    }, "Delete")));
+  }));
+}
+
+// route:/Users/chadoakenfold/Documents/Code/SongToAlbumPlaylist/Code/s2ap-vercel/app/routes/s2ap/account/index.tsx
+var account_exports = {};
+__export(account_exports, {
+  action: () => action3,
+  default: () => AccountManagement,
+  loader: () => loader3
+});
+var import_node3 = require("@remix-run/node");
+var import_react5 = require("@remix-run/react");
+var import_react6 = require("react");
+var action3 = async ({ request }) => {
+  var _a, _b;
+  const session = await spotifyStrategy.getSession(request);
+  const user = await getUserByEmail((_a = session == null ? void 0 : session.user) == null ? void 0 : _a.email);
+  const account = await getAccountBySpotifyId(user == null ? void 0 : user.spotifyId);
+  console.log({
+    session: session == null ? void 0 : session.user,
+    user,
+    account
+  });
+  if (((_b = session == null ? void 0 : session.user) == null ? void 0 : _b.id) !== (user == null ? void 0 : user.spotifyId)) {
+    return (0, import_node3.redirect)("/s2ap/account#trickeryAfoot");
+  }
+  if (!account) {
+    return (0, import_node3.redirect)("/s2ap/account#whoThis");
+  }
+  const form = await request.formData();
+  const formTarget = form.get("formTarget");
+  if (formTarget === "delete") {
+    console.log("would have deleted user!");
+    return (0, import_node3.redirect)("/s2ap/account/deleted");
+  }
+  if (formTarget === "settings") {
+    const formNewsletter = form.get("newsletter");
+    const wantsNewsletter = !!formNewsletter;
+    const update = await updateAccountBySpotifyId({
+      spotifyId: account.spotifyId,
+      data: { newsletter: wantsNewsletter }
+    });
+    console.log("updated account?", update);
+  }
+  return (0, import_node3.redirect)("/s2ap/account");
+};
+var loader3 = async ({ request }) => {
+  var _a;
+  const session = await spotifyStrategy.getSession(request);
+  if (!(session == null ? void 0 : session.user)) {
+    return (0, import_node3.redirect)("/s2ap");
+  }
+  const user = await getUserByEmail((_a = session == null ? void 0 : session.user) == null ? void 0 : _a.email);
+  if (!user) {
+    return (0, import_node3.redirect)("/s2ap");
+  }
+  const account = await getAccountBySpotifyId(user.spotifyId);
+  return { user, account };
+};
+function AccountManagement() {
+  const { user, account } = (0, import_react5.useLoaderData)();
+  const { spotifyId, displayName, email } = user;
+  const [checked, setChecked] = (0, import_react6.useState)(account.preferences.newsletter);
+  const subHeader = "sm:text-3xl text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50";
+  const header = "sm:text-4xl text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-50";
+  return /* @__PURE__ */ React.createElement("div", {
+    className: "flex justify-center p-8"
+  }, /* @__PURE__ */ React.createElement("main", {
+    className: "w-full max-w-3xl"
+  }, /* @__PURE__ */ React.createElement("div", {
+    className: "flex items-center justify-between space-x-4"
+  }, /* @__PURE__ */ React.createElement("h1", {
+    className: "font-light text-slate-900  dark:text-slate-50",
+    title: "Song to Album Playlist"
+  }, "S2ap | Account"), /* @__PURE__ */ React.createElement("div", {
+    className: "flex items-center space-x-4"
+  }, /* @__PURE__ */ React.createElement(import_react5.Link, {
+    className: "dark:text-sky-40 tracking-tight text-sky-500 hover:text-sky-200",
+    to: "/s2ap"
+  }, "Home"))), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", {
+    className: header
+  }, displayName), /* @__PURE__ */ React.createElement("p", null, "This is your account page. Feel free to change any settings or", " ", /* @__PURE__ */ React.createElement("span", {
+    title: "\uFF61\uFF9F( \uFF9F\u0B87\u2038\u0B87\uFF9F)\uFF9F\uFF61"
+  }, "even delete your account")), /* @__PURE__ */ React.createElement("section", {
+    className: "my-8"
+  }, /* @__PURE__ */ React.createElement("h2", {
+    className: subHeader
+  }, "Details"), /* @__PURE__ */ React.createElement("table", null, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("th", null, "Spotify ID"), /* @__PURE__ */ React.createElement("th", null, "Email")), /* @__PURE__ */ React.createElement("tbody", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("td", null, spotifyId), /* @__PURE__ */ React.createElement("td", null, email))))), /* @__PURE__ */ React.createElement("section", {
+    className: "my-8"
+  }, /* @__PURE__ */ React.createElement("h2", {
+    className: subHeader
+  }, "Change settings"), /* @__PURE__ */ React.createElement(import_react5.Form, {
+    method: "post"
+  }, /* @__PURE__ */ React.createElement("fieldset", null, /* @__PURE__ */ React.createElement("input", {
+    type: "hidden",
+    name: "formTarget",
+    value: "settings"
+  }), /* @__PURE__ */ React.createElement("input", {
+    type: "checkbox",
+    name: "newsletter",
+    id: "newsletter",
+    defaultChecked: checked,
+    onClick: () => {
+      setChecked(!checked);
+    }
+  }), " ", /* @__PURE__ */ React.createElement("label", {
+    htmlFor: "newsletter"
+  }, "Send me the occassional email from S2ap")), /* @__PURE__ */ React.createElement("button", {
+    className: "dark:text-sky-40 font-bold tracking-tight text-sky-500 ",
+    type: "submit"
+  }, "Update"))), /* @__PURE__ */ React.createElement("section", {
+    className: "my-8"
+  }, /* @__PURE__ */ React.createElement("h2", {
+    className: subHeader
+  }, "Delete account"), /* @__PURE__ */ React.createElement(MiniForm, {
+    isSubmitting: false,
+    method: "post",
+    inputs: [
+      { name: "spotifyId", value: spotifyId },
+      { name: "formTarget", value: "delete" }
+    ]
+  }, /* @__PURE__ */ React.createElement("button", {
+    className: "dark:text-sky-40 font-bold tracking-tight text-sky-500 ",
+    type: "submit"
+  }, "Delete"))))));
+}
+
 // route:/Users/chadoakenfold/Documents/Code/SongToAlbumPlaylist/Code/s2ap-vercel/app/routes/s2ap/healthcheck.tsx
 var healthcheck_exports = {};
 __export(healthcheck_exports, {
-  loader: () => loader2,
+  loader: () => loader4,
   requiredEnvVars: () => requiredEnvVars
 });
 var requiredEnvVars = () => {
@@ -255,7 +522,7 @@ var requiredEnvVars = () => {
     return resolve(void 0);
   });
 };
-var loader2 = async ({ request }) => {
+var loader4 = async ({ request }) => {
   const host = request.headers.get("X-Forwarded-Host") ?? request.headers.get("host");
   try {
     const url = new URL("/", `http://${host}`);
@@ -274,97 +541,14 @@ var loader2 = async ({ request }) => {
   }
 };
 
-// route:/Users/chadoakenfold/Documents/Code/SongToAlbumPlaylist/Code/s2ap-vercel/app/routes/s2ap/dashboard.tsx
-var dashboard_exports = {};
-__export(dashboard_exports, {
-  action: () => action2,
-  default: () => Create,
-  loader: () => loader3
-});
-var import_node2 = require("@remix-run/node");
-var import_react4 = require("@remix-run/react");
-
-// app/components/MiniForm.tsx
-var import_react3 = require("@remix-run/react");
-var MiniForm = (MiniFormInput) => {
-  const {
-    isSubmitting = false,
-    children,
-    inputs,
-    action: action4,
-    method = "get",
-    keyPrefix
-  } = MiniFormInput;
-  return /* @__PURE__ */ React.createElement(import_react3.Form, {
-    action: action4,
-    method
-  }, /* @__PURE__ */ React.createElement("fieldset", {
-    disabled: isSubmitting
-  }, inputs ? inputs.map(({ name, value }) => {
-    return /* @__PURE__ */ React.createElement("input", {
-      type: "hidden",
-      name,
-      value,
-      key: `${keyPrefix ? keyPrefix : "MiniForm"}-${name}`
-    });
-  }) : null, children));
-};
-
-// route:/Users/chadoakenfold/Documents/Code/SongToAlbumPlaylist/Code/s2ap-vercel/app/routes/s2ap/dashboard.tsx
-var loader3 = async ({ request }) => {
-  var _a;
-  const session = await spotifyStrategy.getSession(request);
-  if (((_a = session == null ? void 0 : session.user) == null ? void 0 : _a.id) !== "c_oak") {
-    return (0, import_node2.redirect)("/s2ap");
-  }
-  const users = await getAllUsers();
-  return users;
-};
-var action2 = async ({ request }) => {
-  var _a;
-  const session = await spotifyStrategy.getSession(request);
-  if (session && ((_a = session == null ? void 0 : session.user) == null ? void 0 : _a.id) === "c_oak") {
-    const form = await request.formData();
-    const spotifyId = form.get("spotifyId");
-    if (spotifyId) {
-      const user = await getUserBySpotifyId(spotifyId);
-      if (user) {
-        const output = await deleteUserBySpotifyId(spotifyId);
-        const urlParam = (output == null ? void 0 : output.displayName) ? `?deleted=${output == null ? void 0 : output.displayName}` : "";
-        return (0, import_node2.redirect)(`/s2ap/dashboard${urlParam}`);
-      }
-      return (0, import_node2.redirect)(`/s2ap/dashboard?error=noUser`);
-    }
-  }
-};
-function Create() {
-  const users = (0, import_react4.useLoaderData)();
-  return /* @__PURE__ */ React.createElement("main", {
-    className: "mx-16 my-16"
-  }, /* @__PURE__ */ React.createElement("h1", {
-    className: "font-light text-slate-900 dark:text-slate-50"
-  }, "Dashboard"), users.map(({ displayName, email, spotifyId }) => {
-    return /* @__PURE__ */ React.createElement("div", {
-      key: spotifyId
-    }, displayName, " - ", email, " ", /* @__PURE__ */ React.createElement(MiniForm, {
-      isSubmitting: false,
-      method: "post",
-      inputs: [{ name: "spotifyId", value: spotifyId }]
-    }, /* @__PURE__ */ React.createElement("button", {
-      className: "dark:text-sky-40 font-bold tracking-tight text-sky-500 ",
-      type: "submit"
-    }, "Delete")));
-  }));
-}
-
 // route:/Users/chadoakenfold/Documents/Code/SongToAlbumPlaylist/Code/s2ap-vercel/app/routes/s2ap/create.tsx
 var create_exports = {};
 __export(create_exports, {
-  action: () => action3,
+  action: () => action4,
   default: () => Create2,
-  loader: () => loader4
+  loader: () => loader5
 });
-var import_node3 = require("@remix-run/node");
+var import_node4 = require("@remix-run/node");
 
 // app/service/spotify.api.server.ts
 var SPOTIFY_API = "https://api.spotify.com/v1";
@@ -434,7 +618,7 @@ var albumGet = async ({
 };
 
 // route:/Users/chadoakenfold/Documents/Code/SongToAlbumPlaylist/Code/s2ap-vercel/app/routes/s2ap/create.tsx
-var loader4 = async ({ request }) => {
+var loader5 = async ({ request }) => {
   const session = await spotifyStrategy.getSession(request);
   let current = {};
   if (session == null ? void 0 : session.user) {
@@ -486,7 +670,7 @@ var createAlbumPlaylistFromCurrentTrack = async ({
     success: false
   };
 };
-var action3 = async ({ request }) => {
+var action4 = async ({ request }) => {
   const session = await spotifyStrategy.getSession(request);
   if (session) {
     const form = await request.formData();
@@ -506,7 +690,7 @@ var action3 = async ({ request }) => {
         albumTitle
       });
       const urlParam = (output == null ? void 0 : output.success) ? `?playlistId=${output.playlistId}` : "";
-      return (0, import_node3.redirect)(`/s2ap${urlParam}`);
+      return (0, import_node4.redirect)(`/s2ap${urlParam}`);
     }
   }
 };
@@ -522,9 +706,9 @@ function Create2() {
 var logout_exports = {};
 __export(logout_exports, {
   default: () => Create3,
-  loader: () => loader5
+  loader: () => loader6
 });
-var loader5 = async ({ request }) => {
+var loader6 = async ({ request }) => {
   return logout(request);
 };
 function Create3() {
@@ -535,9 +719,9 @@ function Create3() {
 var s2ap_exports = {};
 __export(s2ap_exports, {
   default: () => Index,
-  loader: () => loader6
+  loader: () => loader7
 });
-var import_react5 = require("@remix-run/react");
+var import_react7 = require("@remix-run/react");
 
 // app/components/track/index.tsx
 var determineIfAlbum = (album) => {
@@ -616,7 +800,7 @@ function Track({ isSubmitting, current, user, playlistId }) {
 }
 
 // route:/Users/chadoakenfold/Documents/Code/SongToAlbumPlaylist/Code/s2ap-vercel/app/routes/s2ap/index.tsx
-var loader6 = async ({ request }) => {
+var loader7 = async ({ request }) => {
   var _a;
   const session = await spotifyStrategy.getSession(request);
   const build = process.env.BUILD;
@@ -634,9 +818,9 @@ var loader6 = async ({ request }) => {
   };
 };
 function Index() {
-  const { session, current, playlistId, build } = (0, import_react5.useLoaderData)();
+  const { session, current, playlistId, build } = (0, import_react7.useLoaderData)();
   const user = session == null ? void 0 : session.user;
-  const transition = (0, import_react5.useTransition)();
+  const transition = (0, import_react7.useTransition)();
   const isSubmitting = transition.state === "submitting";
   return /* @__PURE__ */ React.createElement("div", {
     className: "flex justify-center p-8"
@@ -649,15 +833,18 @@ function Index() {
     title: "Song to Album Playlist"
   }, "S2ap"), user ? /* @__PURE__ */ React.createElement("div", {
     className: "flex items-center space-x-4"
-  }, /* @__PURE__ */ React.createElement("a", {
-    href: "/s2ap",
-    className: "dark:text-sky-40 tracking-tight text-sky-500 hover:text-sky-200"
-  }, "Reload"), /* @__PURE__ */ React.createElement(MiniForm, {
+  }, /* @__PURE__ */ React.createElement(import_react7.Link, {
+    className: "dark:text-sky-40 tracking-tight text-sky-500 hover:text-sky-200",
+    to: "/s2ap"
+  }, "Reload"), /* @__PURE__ */ React.createElement(import_react7.Link, {
+    className: "dark:text-sky-40 tracking-tight text-sky-500 hover:text-sky-200",
+    to: "/s2ap/account"
+  }, "Account"), /* @__PURE__ */ React.createElement(MiniForm, {
     action: "/s2ap/logout"
   }, /* @__PURE__ */ React.createElement("button", {
     className: "dark:text-sky-40 tracking-tight text-sky-500 hover:text-sky-200",
     type: "submit"
-  }, "Logout"))) : "", " "), !user ? /* @__PURE__ */ React.createElement(import_react5.Form, {
+  }, "Logout"))) : "", " "), !user ? /* @__PURE__ */ React.createElement(import_react7.Form, {
     action: "/s2ap/authorize/spotify",
     method: "post"
   }, /* @__PURE__ */ React.createElement("button", {
@@ -685,17 +872,17 @@ function Index() {
 var routes_exports = {};
 __export(routes_exports, {
   default: () => Index2,
-  loader: () => loader7
+  loader: () => loader8
 });
-var import_react6 = require("@remix-run/react");
-var loader7 = async ({ request }) => {
+var import_react8 = require("@remix-run/react");
+var loader8 = async ({ request }) => {
   const build = process.env.BUILD;
   return {
     build
   };
 };
 function Index2() {
-  const { build } = (0, import_react6.useLoaderData)();
+  const { build } = (0, import_react8.useLoaderData)();
   return /* @__PURE__ */ React.createElement("div", {
     className: "flex justify-center p-8"
   }, /* @__PURE__ */ React.createElement("main", {
@@ -712,7 +899,7 @@ function Index2() {
 }
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { "version": "994cbad6", "entry": { "module": "/build.s2ap/entry.client-POWKEXTE.js", "imports": ["/build.s2ap/_shared/chunk-DWSQRD4J.js", "/build.s2ap/_shared/chunk-6BO74FWO.js"] }, "routes": { "root": { "id": "root", "parentId": void 0, "path": "", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/root-OSNGJTEI.js", "imports": void 0, "hasAction": false, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/index": { "id": "routes/index", "parentId": "root", "path": void 0, "index": true, "caseSensitive": void 0, "module": "/build.s2ap/routes/index-DCWWRODZ.js", "imports": void 0, "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/authorize/spotify": { "id": "routes/s2ap/authorize/spotify", "parentId": "root", "path": "s2ap/authorize/spotify", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/authorize/spotify-VUZYJC6T.js", "imports": void 0, "hasAction": true, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/authorize/spotify.callback": { "id": "routes/s2ap/authorize/spotify.callback", "parentId": "root", "path": "s2ap/authorize/spotify/callback", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/authorize/spotify.callback-626IVBA6.js", "imports": void 0, "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/create": { "id": "routes/s2ap/create", "parentId": "root", "path": "s2ap/create", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/create-T75RJAY4.js", "imports": ["/build.s2ap/_shared/chunk-ZVJXL2KF.js", "/build.s2ap/_shared/chunk-IX3USF6X.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/dashboard": { "id": "routes/s2ap/dashboard", "parentId": "root", "path": "s2ap/dashboard", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/dashboard-CLELNWCH.js", "imports": ["/build.s2ap/_shared/chunk-O7EGGWM3.js", "/build.s2ap/_shared/chunk-IX3USF6X.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/healthcheck": { "id": "routes/s2ap/healthcheck", "parentId": "root", "path": "s2ap/healthcheck", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/healthcheck-ZK63EQIF.js", "imports": void 0, "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/index": { "id": "routes/s2ap/index", "parentId": "root", "path": "s2ap", "index": true, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/index-JVG6P3O5.js", "imports": ["/build.s2ap/_shared/chunk-O7EGGWM3.js", "/build.s2ap/_shared/chunk-ZVJXL2KF.js", "/build.s2ap/_shared/chunk-IX3USF6X.js", "/build.s2ap/_shared/chunk-ME5PAYV3.js"], "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/logout": { "id": "routes/s2ap/logout", "parentId": "root", "path": "s2ap/logout", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/logout-7QTEXJ2U.js", "imports": ["/build.s2ap/_shared/chunk-ME5PAYV3.js"], "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false } }, "url": "/build.s2ap/manifest-994CBAD6.js" };
+var assets_manifest_default = { "version": "c6c3d559", "entry": { "module": "/build.s2ap/entry.client-HVOLQGJ2.js", "imports": ["/build.s2ap/_shared/chunk-EWZJCNHN.js", "/build.s2ap/_shared/chunk-6BO74FWO.js"] }, "routes": { "root": { "id": "root", "parentId": void 0, "path": "", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/root-IDZYG2XQ.js", "imports": void 0, "hasAction": false, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/index": { "id": "routes/index", "parentId": "root", "path": void 0, "index": true, "caseSensitive": void 0, "module": "/build.s2ap/routes/index-ILCTUCOU.js", "imports": void 0, "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/account/deleted": { "id": "routes/s2ap/account/deleted", "parentId": "root", "path": "s2ap/account/deleted", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/account/deleted-U7JB2AST.js", "imports": void 0, "hasAction": false, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/account/index": { "id": "routes/s2ap/account/index", "parentId": "root", "path": "s2ap/account", "index": true, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/account/index-NBCS256H.js", "imports": ["/build.s2ap/_shared/chunk-DFG4XZEI.js", "/build.s2ap/_shared/chunk-NTKF6GZO.js", "/build.s2ap/_shared/chunk-IX3USF6X.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/admin/dashboard": { "id": "routes/s2ap/admin/dashboard", "parentId": "root", "path": "s2ap/admin/dashboard", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/admin/dashboard-4Z6SK54A.js", "imports": ["/build.s2ap/_shared/chunk-DFG4XZEI.js", "/build.s2ap/_shared/chunk-NTKF6GZO.js", "/build.s2ap/_shared/chunk-IX3USF6X.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/authorize/spotify": { "id": "routes/s2ap/authorize/spotify", "parentId": "root", "path": "s2ap/authorize/spotify", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/authorize/spotify-VUZYJC6T.js", "imports": void 0, "hasAction": true, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/authorize/spotify.callback": { "id": "routes/s2ap/authorize/spotify.callback", "parentId": "root", "path": "s2ap/authorize/spotify/callback", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/authorize/spotify.callback-626IVBA6.js", "imports": void 0, "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/create": { "id": "routes/s2ap/create", "parentId": "root", "path": "s2ap/create", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/create-T75RJAY4.js", "imports": ["/build.s2ap/_shared/chunk-ZVJXL2KF.js", "/build.s2ap/_shared/chunk-IX3USF6X.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/healthcheck": { "id": "routes/s2ap/healthcheck", "parentId": "root", "path": "s2ap/healthcheck", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/healthcheck-ZK63EQIF.js", "imports": void 0, "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/index": { "id": "routes/s2ap/index", "parentId": "root", "path": "s2ap", "index": true, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/index-JTJY3WA6.js", "imports": ["/build.s2ap/_shared/chunk-ZVJXL2KF.js", "/build.s2ap/_shared/chunk-ME5PAYV3.js", "/build.s2ap/_shared/chunk-NTKF6GZO.js", "/build.s2ap/_shared/chunk-IX3USF6X.js"], "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/logout": { "id": "routes/s2ap/logout", "parentId": "root", "path": "s2ap/logout", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/logout-7QTEXJ2U.js", "imports": ["/build.s2ap/_shared/chunk-ME5PAYV3.js"], "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false } }, "url": "/build.s2ap/manifest-C6C3D559.js" };
 
 // server-entry-module:@remix-run/dev/server-build
 var entry = { module: entry_server_exports };
@@ -741,6 +928,30 @@ var routes = {
     caseSensitive: void 0,
     module: spotify_exports
   },
+  "routes/s2ap/account/deleted": {
+    id: "routes/s2ap/account/deleted",
+    parentId: "root",
+    path: "s2ap/account/deleted",
+    index: void 0,
+    caseSensitive: void 0,
+    module: deleted_exports
+  },
+  "routes/s2ap/admin/dashboard": {
+    id: "routes/s2ap/admin/dashboard",
+    parentId: "root",
+    path: "s2ap/admin/dashboard",
+    index: void 0,
+    caseSensitive: void 0,
+    module: dashboard_exports
+  },
+  "routes/s2ap/account/index": {
+    id: "routes/s2ap/account/index",
+    parentId: "root",
+    path: "s2ap/account",
+    index: true,
+    caseSensitive: void 0,
+    module: account_exports
+  },
   "routes/s2ap/healthcheck": {
     id: "routes/s2ap/healthcheck",
     parentId: "root",
@@ -748,14 +959,6 @@ var routes = {
     index: void 0,
     caseSensitive: void 0,
     module: healthcheck_exports
-  },
-  "routes/s2ap/dashboard": {
-    id: "routes/s2ap/dashboard",
-    parentId: "root",
-    path: "s2ap/dashboard",
-    index: void 0,
-    caseSensitive: void 0,
-    module: dashboard_exports
   },
   "routes/s2ap/create": {
     id: "routes/s2ap/create",
