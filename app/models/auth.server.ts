@@ -7,6 +7,12 @@ import invariant from "tiny-invariant";
 
 import { getUserBySpotifyId, createUser } from "~/models/user.server";
 
+import {
+  createAccountWithSpotifyId,
+  getAccountBySpotifyId,
+} from "~/models/account.server";
+// import type { CreateAccountInput } from "~/models/account.server";
+
 invariant(process.env.SPOTIFY_CLIENT_ID, "Missing SPOTIFY_CLIENT_ID env");
 invariant(
   process.env.SPOTIFY_CLIENT_SECRET,
@@ -40,6 +46,14 @@ export const spotifyStrategy = new SpotifyStrategy(
         email: profile.__json.email,
         displayName: profile.displayName,
         spotifyId: profile.id,
+      });
+    }
+    // Get/Create account
+    let account = await getAccountBySpotifyId(profile.id);
+    if (!account) {
+      account = await createAccountWithSpotifyId({
+        spotifyId: profile.id,
+        preferences: { newsletter: true },
       });
     }
 

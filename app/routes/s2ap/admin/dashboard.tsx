@@ -29,6 +29,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   return users;
 };
 
+export const DASHBOARD_URL = "/s2ap/admin/dashboard";
 export const action: ActionFunction = async ({ request }) => {
   const session = await spotifyStrategy.getSession(request);
   if (session && session?.user?.id === "c_oak") {
@@ -43,9 +44,9 @@ export const action: ActionFunction = async ({ request }) => {
         const urlParam = output?.displayName
           ? `?deleted=${output?.displayName}`
           : "";
-        return redirect(`/s2ap/dashboard${urlParam}`);
+        return redirect(`${DASHBOARD_URL}${urlParam}`);
       }
-      return redirect(`/s2ap/dashboard?error=noUser`);
+      return redirect(`${DASHBOARD_URL}?error=noUser`);
     }
   }
 };

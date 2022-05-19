@@ -1,5 +1,5 @@
 import type { LoaderFunction } from "@remix-run/node";
-import { Form, useLoaderData, useTransition } from "@remix-run/react";
+import { Form, useLoaderData, useTransition, Link } from "@remix-run/react";
 import type { Session } from "remix-auth-spotify";
 import { spotifyStrategy } from "~/models/auth.server";
 import { logout } from "~/session.server";
@@ -54,12 +54,19 @@ export default function Index() {
           </h1>
           {user ? (
             <div className="flex items-center space-x-4">
-              <a
-                href="/s2ap"
+              <Link
                 className="dark:text-sky-40 tracking-tight text-sky-500 hover:text-sky-200"
+                to={"/s2ap"}
               >
                 Reload
-              </a>
+              </Link>
+
+              <Link
+                className="dark:text-sky-40 tracking-tight text-sky-500 hover:text-sky-200"
+                to={"/s2ap/account"}
+              >
+                Account
+              </Link>
 
               <MiniForm action="/s2ap/logout">
                 <button

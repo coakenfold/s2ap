@@ -14,3 +14,13 @@ model User {
   spotifyId   String   @unique
   createdAt   DateTime @default(now())
 }
+
+type Preferences {
+  newsletter Boolean
+}
+
+model Account {
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  spotifyId   String      @unique
+  preferences Preferences
+}
