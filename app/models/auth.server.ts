@@ -11,7 +11,7 @@ import {
   createAccountWithSpotifyId,
   getAccountBySpotifyId,
 } from "~/models/account.server";
-import type { CreateAccountInput } from "~/models/account.server";
+// import type { CreateAccountInput } from "~/models/account.server";
 
 invariant(process.env.SPOTIFY_CLIENT_ID, "Missing SPOTIFY_CLIENT_ID env");
 invariant(
@@ -51,11 +51,10 @@ export const spotifyStrategy = new SpotifyStrategy(
     // Get/Create account
     let account = await getAccountBySpotifyId(profile.id);
     if (!account) {
-      account = createAccountWithSpotifyId({
+      account = await createAccountWithSpotifyId({
         spotifyId: profile.id,
         preferences: { newsletter: true },
       });
-      console.log("!!!", account);
     }
 
     return {

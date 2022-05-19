@@ -12,15 +12,19 @@ import type { User } from "~/models/user.server";
 import {
   getAccountBySpotifyId,
   updateAccountBySpotifyId,
-  deleteAccountBySpotifyId,
+  // deleteAccountBySpotifyId,
 } from "~/models/account.server";
 import type { Account } from "~/models/account.server";
 import { useState } from "react";
 
 export const action: ActionFunction = async ({ request }) => {
   const session = await spotifyStrategy.getSession(request);
-  const user = await getUserByEmail(session?.user?.email);
-  const account = await getAccountBySpotifyId(user?.spotifyId);
+  if (!session) {
+    return redirect("/s2ap/account");
+  }
+  const sessionUser = session?.user as User;
+  const user = await getUserByEmail(sessionUser.email);
+  const account = await getAccountBySpotifyId(user?.spotifyId as string);
   console.log({
     session: session?.user,
     user,
