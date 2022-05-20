@@ -7,5 +7,5 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export default function Create() {
-  return <div>logging out</div>;
+  return <div>Logging out</div>;
 }
