@@ -26,7 +26,7 @@ export default function Deleted() {
           to="/s2ap"
           className="dark:text-sky-40 tracking-tight tracking-tight text-sky-500 hover:text-sky-200 sm:text-4xl"
         >
-          Log back in
+          Home
         </Link>
       </main>
     </div>
