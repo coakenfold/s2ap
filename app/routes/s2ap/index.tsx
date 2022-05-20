@@ -47,7 +47,7 @@ export default function Index() {
       <main className="w-full max-w-3xl">
         <div className="flex items-center justify-between space-x-4">
           <h1
-            className="font-light text-slate-900  dark:text-slate-50"
+            className="text-sm font-light text-slate-900 dark:text-slate-50  sm:text-sm"
             title="Song to Album Playlist"
           >
             S2ap

@@ -5,7 +5,7 @@ export default function Deleted() {
       <main className="w-full max-w-3xl">
         <div className="flex items-center justify-between space-x-4">
           <h1
-            className="font-light text-slate-900  dark:text-slate-50"
+            className="text-sm font-light text-slate-900 dark:text-slate-50  sm:text-sm"
             title="Song to Album Playlist"
           >
             S2ap | Account | Deleted
@@ -16,17 +16,17 @@ export default function Deleted() {
           Thanks for trying out <span title="Song to Album Playlist">S2ap</span>
           !
         </h2>
-        <h3 className="my-2 text-xl text-slate-900 dark:text-slate-50 sm:text-2xl">
+        <p className="my-2 text-xl text-slate-900 dark:text-slate-50 sm:text-2xl">
           We deleted your account
-        </h3>
-        <p className="my-2">
+        </p>
+        <p className="my-8">
           Hope you'll come back and check us out again in the future
         </p>
         <Link
           to="/s2ap"
-          className="dark:text-sky-40 tracking-tight tracking-tight text-sky-500 hover:text-sky-200 sm:text-4xl"
+          className="dark:text-sky-40 tracking-tight tracking-tight text-sky-500 hover:text-sky-200 sm:text-2xl"
         >
-          Home
+          S2ap
         </Link>
       </main>
     </div>

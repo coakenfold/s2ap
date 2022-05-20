@@ -88,15 +88,13 @@ export default function AccountManagement() {
 
   const subHeader =
     "sm:text-3xl text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50";
-  const header =
-    "sm:text-4xl text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-50";
 
   return (
     <div className="flex justify-center p-8">
       <main className="w-full max-w-3xl">
         <div className="flex items-center justify-between space-x-4">
           <h1
-            className="font-light text-slate-900  dark:text-slate-50"
+            className="text-sm font-light text-slate-900 dark:text-slate-50  sm:text-sm"
             title="Song to Album Playlist"
           >
             S2ap | Account
@@ -112,17 +110,21 @@ export default function AccountManagement() {
           </div>
         </div>
         <div>
-          <h1 className={header}>{displayName}</h1>
+          <h1 className="my-2 text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-50 sm:text-4xl">
+            {displayName}
+          </h1>
           <p>
             This is your account page. Feel free to change any settings or{" "}
             <span title="｡ﾟ( ﾟஇ‸இﾟ)ﾟ｡">even delete your account</span>
           </p>
           <section className="my-8">
             <h2 className={subHeader}>Details</h2>
-            <table>
+            <table className="w-full  text-left">
               <thead>
-                <th>Spotify ID</th>
-                <th>Email</th>
+                <tr>
+                  <th>Spotify ID</th>
+                  <th>Email</th>
+                </tr>
               </thead>
               <tbody>
                 <tr>
@@ -137,7 +139,7 @@ export default function AccountManagement() {
             <h2 className={subHeader}>Change settings</h2>
 
             <Form method="post">
-              <fieldset>
+              <fieldset className="my-2 ">
                 <input type="hidden" name="formTarget" value="settings" />
                 <input
                   type="checkbox"
@@ -149,11 +151,11 @@ export default function AccountManagement() {
                   }}
                 />{" "}
                 <label htmlFor="newsletter">
-                  Send me the occassional email from S2ap
+                  I'll accept (the occasional) email from S2ap
                 </label>
               </fieldset>
               <button
-                className="dark:text-sky-40 font-bold tracking-tight text-sky-500 "
+                className="dark:highlight-white/20 my-4 flex w-full items-center justify-center rounded-lg bg-slate-900 py-2 px-4 font-semibold text-white hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 dark:bg-sky-500 dark:hover:bg-sky-400 sm:w-auto"
                 type="submit"
               >
                 Update
@@ -172,10 +174,10 @@ export default function AccountManagement() {
               ]}
             >
               <button
-                className="dark:text-sky-40 font-bold tracking-tight text-sky-500 "
+                className="dark:highlight-white/20 my-4 flex w-full items-center justify-center rounded-lg bg-red-900 py-2 px-4  text-xl font-semibold text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 focus:ring-offset-red-50 dark:bg-rose-500 dark:hover:bg-rose-400 sm:w-auto"
                 type="submit"
               >
-                Delete
+                Delete?
               </button>
             </MiniForm>
           </section>
