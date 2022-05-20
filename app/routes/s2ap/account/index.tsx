@@ -87,7 +87,7 @@ export default function AccountManagement() {
   const [checked, setChecked] = useState(account?.preferences.newsletter);
 
   const subHeader =
-    "sm:text-3xl text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50";
+    "sm:text-3xl text-3xl mb-2 font-bold tracking-tight text-slate-900 dark:text-slate-50";
 
   return (
     <div className="flex justify-center p-8">
@@ -165,21 +165,33 @@ export default function AccountManagement() {
 
           <section className="my-8">
             <h2 className={subHeader}>Delete account</h2>
-            <MiniForm
-              isSubmitting={false}
-              method="post"
-              inputs={[
-                { name: "spotifyId", value: spotifyId },
-                { name: "formTarget", value: "delete" },
-              ]}
-            >
-              <button
-                className="dark:highlight-white/20 my-4 flex w-full items-center justify-center rounded-lg bg-red-900 py-2 px-4  text-xl font-semibold text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 focus:ring-offset-red-50 dark:bg-rose-500 dark:hover:bg-rose-400 sm:w-auto"
-                type="submit"
-              >
-                Delete?
-              </button>
-            </MiniForm>
+
+            <Form method="post">
+              <fieldset className="my-2 ">
+                <input type="hidden" name="formTarget" value="delete" />
+                <input type="hidden" name="spotifyId" value={spotifyId} />
+
+                <button
+                  className="dark:highlight-white/20 flex w-full items-center justify-center rounded-lg bg-red-900 py-2 px-4 font-semibold text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 focus:ring-offset-red-50 dark:bg-rose-500 dark:hover:bg-rose-400 sm:w-auto"
+                  type="submit"
+                >
+                  Delete
+                </button>
+              </fieldset>
+            </Form>
+          </section>
+
+          <section className="my-8">
+            <h2 className={subHeader}>Privacy policy</h2>
+
+            <p className="my-2">
+              We save your email and Spotify user name. We won't sell or share
+              this information
+            </p>
+            <p className="my-2">
+              We would like to send you a newsletter at some point in the
+              future. You can opt out using the form above
+            </p>
           </section>
         </div>
       </main>

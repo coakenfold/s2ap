@@ -73,7 +73,7 @@ export function Track({ isSubmitting, current, user, playlistId }: TrackInput) {
         </div>
       ) : null}
       {user && current && !isSongFromAlbum ? (
-        <div className="py-2">
+        <div className="pt-2 pb-8">
           <div>
             We think this is a single. The album has {albumTracks}{" "}
             {albumTracks > 1 ? "tracks" : "track"}
