@@ -56,7 +56,7 @@ export default function Create() {
 
   return (
     <main className="mx-16 my-16">
-      <h1 className="text-sm font-light text-slate-900 dark:text-slate-50 sm:text-sm">
+      <h1 className="font-light text-slate-900 dark:text-slate-50">
         Dashboard
       </h1>
 

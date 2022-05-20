@@ -47,7 +47,7 @@ export default function Index() {
       <main className="w-full max-w-3xl">
         <div className="flex items-center justify-between space-x-4">
           <h1
-            className="text-sm font-light text-slate-900 dark:text-slate-50  sm:text-sm"
+            className="font-light text-slate-900 dark:text-slate-50"
             title="Song to Album Playlist"
           >
             S2ap
@@ -83,7 +83,7 @@ export default function Index() {
         </div>
         {!user ? (
           <Form action="/s2ap/authorize/spotify" method="post">
-            <button className=" dark:text-sky-40 tracking-tight tracking-tight text-sky-500 hover:text-sky-200 sm:text-4xl">
+            <button className="dark:highlight-white/20 my-2 flex h-14 w-full items-center justify-center rounded-lg bg-slate-900 px-6 text-xl font-semibold text-white hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 dark:bg-sky-500 dark:hover:bg-sky-400 sm:w-auto">
               Log in with Spotify
             </button>
           </Form>

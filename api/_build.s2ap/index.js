@@ -276,7 +276,7 @@ function Deleted() {
   }, /* @__PURE__ */ React.createElement("div", {
     className: "flex items-center justify-between space-x-4"
   }, /* @__PURE__ */ React.createElement("h1", {
-    className: "text-sm font-light text-slate-900 dark:text-slate-50  sm:text-sm",
+    className: "font-light text-slate-900 dark:text-slate-50",
     title: "Song to Album Playlist"
   }, "S2ap | Account | Deleted")), /* @__PURE__ */ React.createElement("h2", {
     className: "mb-8 text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-50 sm:text-4xl"
@@ -362,7 +362,7 @@ function Create() {
   return /* @__PURE__ */ React.createElement("main", {
     className: "mx-16 my-16"
   }, /* @__PURE__ */ React.createElement("h1", {
-    className: "text-sm font-light text-slate-900 dark:text-slate-50 sm:text-sm"
+    className: "font-light text-slate-900 dark:text-slate-50"
   }, "Dashboard"), users.map(({ displayName, email, spotifyId }) => {
     return /* @__PURE__ */ React.createElement("div", {
       key: spotifyId
@@ -449,7 +449,7 @@ function AccountManagement() {
   }, /* @__PURE__ */ React.createElement("div", {
     className: "flex items-center justify-between space-x-4"
   }, /* @__PURE__ */ React.createElement("h1", {
-    className: "text-sm font-light text-slate-900 dark:text-slate-50  sm:text-sm",
+    className: "font-light text-slate-900 dark:text-slate-50",
     title: "Song to Album Playlist"
   }, "S2ap | Account"), /* @__PURE__ */ React.createElement("div", {
     className: "flex items-center space-x-4"
@@ -859,7 +859,7 @@ function Index() {
   }, /* @__PURE__ */ React.createElement("div", {
     className: "flex items-center justify-between space-x-4"
   }, /* @__PURE__ */ React.createElement("h1", {
-    className: "text-sm font-light text-slate-900 dark:text-slate-50  sm:text-sm",
+    className: "font-light text-slate-900 dark:text-slate-50",
     title: "Song to Album Playlist"
   }, "S2ap"), user ? /* @__PURE__ */ React.createElement("div", {
     className: "flex items-center space-x-4"
@@ -878,7 +878,7 @@ function Index() {
     action: "/s2ap/authorize/spotify",
     method: "post"
   }, /* @__PURE__ */ React.createElement("button", {
-    className: " dark:text-sky-40 tracking-tight tracking-tight text-sky-500 hover:text-sky-200 sm:text-4xl"
+    className: "dark:highlight-white/20 my-2 flex h-14 w-full items-center justify-center rounded-lg bg-slate-900 px-6 text-xl font-semibold text-white hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 dark:bg-sky-500 dark:hover:bg-sky-400 sm:w-auto"
   }, "Log in with Spotify")) : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("h1", {
     className: "text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50 sm:text-4xl "
   }, "Hello", " ", user ? /* @__PURE__ */ React.createElement("strong", {
@@ -918,7 +918,7 @@ function Index2() {
   }, /* @__PURE__ */ React.createElement("main", {
     className: "w-full max-w-3xl"
   }, /* @__PURE__ */ React.createElement("h1", {
-    className: "text-sm font-light text-slate-900 dark:text-slate-50  sm:text-sm",
+    className: "font-light text-slate-900 dark:text-slate-50",
     title: "Song to Album Playlist"
   }, "S2ap"), /* @__PURE__ */ React.createElement("a", {
     href: "s2ap",
@@ -929,7 +929,7 @@ function Index2() {
 }
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { "version": "51c1428f", "entry": { "module": "/build.s2ap/entry.client-FGMXYANI.js", "imports": ["/build.s2ap/_shared/chunk-MOZPDKA5.js", "/build.s2ap/_shared/chunk-6BO74FWO.js"] }, "routes": { "root": { "id": "root", "parentId": void 0, "path": "", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/root-KELV3POG.js", "imports": void 0, "hasAction": false, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/index": { "id": "routes/index", "parentId": "root", "path": void 0, "index": true, "caseSensitive": void 0, "module": "/build.s2ap/routes/index-XLY33FGH.js", "imports": void 0, "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/account/deleted": { "id": "routes/s2ap/account/deleted", "parentId": "root", "path": "s2ap/account/deleted", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/account/deleted-E2YB6NBU.js", "imports": void 0, "hasAction": false, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/account/index": { "id": "routes/s2ap/account/index", "parentId": "root", "path": "s2ap/account", "index": true, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/account/index-6K5ER4OE.js", "imports": ["/build.s2ap/_shared/chunk-ME5PAYV3.js", "/build.s2ap/_shared/chunk-DFG4XZEI.js", "/build.s2ap/_shared/chunk-IX3USF6X.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/admin/dashboard": { "id": "routes/s2ap/admin/dashboard", "parentId": "root", "path": "s2ap/admin/dashboard", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/admin/dashboard-OBUOSDW2.js", "imports": ["/build.s2ap/_shared/chunk-A4HVU3OZ.js", "/build.s2ap/_shared/chunk-DFG4XZEI.js", "/build.s2ap/_shared/chunk-IX3USF6X.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/authorize/spotify": { "id": "routes/s2ap/authorize/spotify", "parentId": "root", "path": "s2ap/authorize/spotify", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/authorize/spotify-VUZYJC6T.js", "imports": void 0, "hasAction": true, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/authorize/spotify.callback": { "id": "routes/s2ap/authorize/spotify.callback", "parentId": "root", "path": "s2ap/authorize/spotify/callback", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/authorize/spotify.callback-626IVBA6.js", "imports": void 0, "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/create": { "id": "routes/s2ap/create", "parentId": "root", "path": "s2ap/create", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/create-T75RJAY4.js", "imports": ["/build.s2ap/_shared/chunk-ZVJXL2KF.js", "/build.s2ap/_shared/chunk-IX3USF6X.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/healthcheck": { "id": "routes/s2ap/healthcheck", "parentId": "root", "path": "s2ap/healthcheck", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/healthcheck-ZK63EQIF.js", "imports": void 0, "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/index": { "id": "routes/s2ap/index", "parentId": "root", "path": "s2ap", "index": true, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/index-USMLMEZ6.js", "imports": ["/build.s2ap/_shared/chunk-ZVJXL2KF.js", "/build.s2ap/_shared/chunk-A4HVU3OZ.js", "/build.s2ap/_shared/chunk-ME5PAYV3.js", "/build.s2ap/_shared/chunk-IX3USF6X.js"], "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/logout": { "id": "routes/s2ap/logout", "parentId": "root", "path": "s2ap/logout", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/logout-SJ5F4HKY.js", "imports": ["/build.s2ap/_shared/chunk-ME5PAYV3.js"], "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false } }, "url": "/build.s2ap/manifest-51C1428F.js" };
+var assets_manifest_default = { "version": "033d1ef7", "entry": { "module": "/build.s2ap/entry.client-FGMXYANI.js", "imports": ["/build.s2ap/_shared/chunk-MOZPDKA5.js", "/build.s2ap/_shared/chunk-6BO74FWO.js"] }, "routes": { "root": { "id": "root", "parentId": void 0, "path": "", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/root-KELV3POG.js", "imports": void 0, "hasAction": false, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/index": { "id": "routes/index", "parentId": "root", "path": void 0, "index": true, "caseSensitive": void 0, "module": "/build.s2ap/routes/index-I3FF5VTQ.js", "imports": void 0, "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/account/deleted": { "id": "routes/s2ap/account/deleted", "parentId": "root", "path": "s2ap/account/deleted", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/account/deleted-TXQW6WSP.js", "imports": void 0, "hasAction": false, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/account/index": { "id": "routes/s2ap/account/index", "parentId": "root", "path": "s2ap/account", "index": true, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/account/index-K7V4EOX4.js", "imports": ["/build.s2ap/_shared/chunk-ME5PAYV3.js", "/build.s2ap/_shared/chunk-DFG4XZEI.js", "/build.s2ap/_shared/chunk-IX3USF6X.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/admin/dashboard": { "id": "routes/s2ap/admin/dashboard", "parentId": "root", "path": "s2ap/admin/dashboard", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/admin/dashboard-VFFG3NLB.js", "imports": ["/build.s2ap/_shared/chunk-A4HVU3OZ.js", "/build.s2ap/_shared/chunk-DFG4XZEI.js", "/build.s2ap/_shared/chunk-IX3USF6X.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/authorize/spotify": { "id": "routes/s2ap/authorize/spotify", "parentId": "root", "path": "s2ap/authorize/spotify", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/authorize/spotify-VUZYJC6T.js", "imports": void 0, "hasAction": true, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/authorize/spotify.callback": { "id": "routes/s2ap/authorize/spotify.callback", "parentId": "root", "path": "s2ap/authorize/spotify/callback", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/authorize/spotify.callback-626IVBA6.js", "imports": void 0, "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/create": { "id": "routes/s2ap/create", "parentId": "root", "path": "s2ap/create", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/create-T75RJAY4.js", "imports": ["/build.s2ap/_shared/chunk-ZVJXL2KF.js", "/build.s2ap/_shared/chunk-IX3USF6X.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/healthcheck": { "id": "routes/s2ap/healthcheck", "parentId": "root", "path": "s2ap/healthcheck", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/healthcheck-ZK63EQIF.js", "imports": void 0, "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/index": { "id": "routes/s2ap/index", "parentId": "root", "path": "s2ap", "index": true, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/index-JVIQN3JA.js", "imports": ["/build.s2ap/_shared/chunk-ZVJXL2KF.js", "/build.s2ap/_shared/chunk-A4HVU3OZ.js", "/build.s2ap/_shared/chunk-ME5PAYV3.js", "/build.s2ap/_shared/chunk-IX3USF6X.js"], "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/logout": { "id": "routes/s2ap/logout", "parentId": "root", "path": "s2ap/logout", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/logout-SJ5F4HKY.js", "imports": ["/build.s2ap/_shared/chunk-ME5PAYV3.js"], "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false } }, "url": "/build.s2ap/manifest-033D1EF7.js" };
 
 // server-entry-module:@remix-run/dev/server-build
 var entry = { module: entry_server_exports };
