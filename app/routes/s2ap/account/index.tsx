@@ -181,7 +181,7 @@ export default function AccountManagement() {
             </Form>
           </section>
 
-          <section className="my-8">
+          <section className="my-20">
             <h2 className={subHeader}>Privacy policy</h2>
 
             <p className="my-2">
