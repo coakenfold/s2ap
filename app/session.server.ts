@@ -19,9 +19,9 @@ export const { getSession, commitSession, destroySession } = sessionStorage;
 function getUserSession(request: Request) {
   return sessionStorage.getSession(request.headers.get("Cookie"));
 }
-export async function logout(request: Request) {
+export async function logout(request: Request, url: string = "/s2ap") {
   const session = await getUserSession(request);
-  return redirect("/s2ap", {
+  return redirect(url, {
     headers: {
       "Set-Cookie": await sessionStorage.destroySession(session),
     },

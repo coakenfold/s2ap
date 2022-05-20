@@ -1,23 +1,34 @@
+import { Link } from "@remix-run/react";
 export default function Deleted() {
-  const subHeader =
-    "sm:text-2xl text-2xl my-4 text-slate-900 dark:text-slate-50";
-  const header =
-    "sm:text-4xl text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-50";
-
   return (
-    <main className="mx-16 my-16">
-      <h1
-        className="font-light text-slate-900  dark:text-slate-50"
-        title="Song to Album Playlist"
-      >
-        We deleted your account
-      </h1>
-      <h1 className={header}>
-        Thanks for trying out <span title="Song to Album Playlist">S2ap</span>!
-      </h1>
-      <h2 className={subHeader}>
-        Hope you'll come back and check us out again in the future
-      </h2>
-    </main>
+    <div className="flex justify-center p-8">
+      <main className="w-full max-w-3xl">
+        <div className="flex items-center justify-between space-x-4">
+          <h1
+            className="font-light text-slate-900  dark:text-slate-50"
+            title="Song to Album Playlist"
+          >
+            S2ap | Account | Deleted
+          </h1>
+        </div>
+
+        <h2 className="mb-8 text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-50 sm:text-4xl">
+          Thanks for trying out <span title="Song to Album Playlist">S2ap</span>
+          !
+        </h2>
+        <h3 className="my-2 text-xl text-slate-900 dark:text-slate-50 sm:text-2xl">
+          We deleted your account
+        </h3>
+        <p className="my-2">
+          Hope you'll come back and check us out again in the future
+        </p>
+        <Link
+          to="/s2ap"
+          className="dark:text-sky-40 tracking-tight tracking-tight text-sky-500 hover:text-sky-200 sm:text-4xl"
+        >
+          Log back in
+        </Link>
+      </main>
+    </div>
   );
 }

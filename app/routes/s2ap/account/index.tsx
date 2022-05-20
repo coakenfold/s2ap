@@ -4,6 +4,7 @@ import { Form, useLoaderData, Link } from "@remix-run/react";
 
 import { spotifyStrategy } from "~/models/auth.server";
 
+import { logout } from "~/session.server";
 import { MiniForm } from "~/components/MiniForm";
 
 import { getUserByEmail } from "~/models/user.server";
@@ -12,50 +13,46 @@ import type { User } from "~/models/user.server";
 import {
   getAccountBySpotifyId,
   updateAccountBySpotifyId,
-  // deleteAccountBySpotifyId,
+  deleteAccountBySpotifyId,
 } from "~/models/account.server";
+
 import type { Account } from "~/models/account.server";
 import { useState } from "react";
 
 export const action: ActionFunction = async ({ request }) => {
   const session = await spotifyStrategy.getSession(request);
   if (!session) {
-    return redirect("/s2ap/account");
+    return redirect("/s2ap#noSession");
   }
   const sessionUser = session?.user as User;
   const user = await getUserByEmail(sessionUser.email);
   const account = await getAccountBySpotifyId(user?.spotifyId as string);
-  console.log({
-    session: session?.user,
-    user,
-    account,
-  });
+
   // Ensure the user is editing their own data
   if (session?.user?.id !== user?.spotifyId) {
-    return redirect("/s2ap/account#trickeryAfoot");
+    return redirect("/s2ap#noSessionUserId");
   }
   if (!account) {
-    return redirect("/s2ap/account#whoThis");
+    return redirect("/s2ap#noAccount");
   }
 
   const form = await request.formData();
   const formTarget = form.get("formTarget");
 
   if (formTarget === "delete") {
-    console.log("would have deleted user!");
-
-    return redirect("/s2ap/account/deleted");
+    const accountDelete = await deleteAccountBySpotifyId(account.spotifyId);
+    console.log("accountDelete", accountDelete);
+    return logout(request, "/s2ap/account/deleted");
   }
   if (formTarget === "settings") {
     const formNewsletter = form.get("newsletter");
     const wantsNewsletter = !!formNewsletter;
-    const update = await updateAccountBySpotifyId({
+    const accountUpdate = await updateAccountBySpotifyId({
       spotifyId: account.spotifyId,
       data: { newsletter: wantsNewsletter },
     });
-    console.log("updated account?", update);
-
-    // return redirect("/s2ap/account");
+    console.log("accountUpdate", accountUpdate);
+    return redirect("/s2ap/account");
   }
 
   return redirect("/s2ap/account");
@@ -78,12 +75,16 @@ export const loader: LoaderFunction = async ({ request }) => {
   }
 
   const account = await getAccountBySpotifyId(user.spotifyId);
+
+  if (!account) {
+    return redirect("/s2ap");
+  }
   return { user, account };
 };
 export default function AccountManagement() {
   const { user, account } = useLoaderData<LoaderOutput>();
   const { spotifyId, displayName, email } = user;
-  const [checked, setChecked] = useState(account.preferences.newsletter);
+  const [checked, setChecked] = useState(account?.preferences.newsletter);
 
   const subHeader =
     "sm:text-3xl text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50";
