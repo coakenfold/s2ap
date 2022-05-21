@@ -66,7 +66,7 @@ __export(root_exports, {
 var import_react2 = require("@remix-run/react");
 
 // app/styles/tailwind.css
-var tailwind_default = "/build.s2ap/_assets/tailwind-BHESSGQQ.css";
+var tailwind_default = "/build.s2ap/_assets/tailwind-3PHVV4SO.css";
 
 // route:/Users/chadoakenfold/Documents/Code/SongToAlbumPlaylist/Code/s2ap-vercel/app/root.tsx
 var links = () => {
@@ -441,7 +441,8 @@ function AccountManagement() {
   const { user, account } = (0, import_react6.useLoaderData)();
   const { spotifyId, displayName, email } = user;
   const [checked, setChecked] = (0, import_react7.useState)(account == null ? void 0 : account.preferences.newsletter);
-  const subHeader = "sm:text-3xl text-3xl mb-2 font-bold tracking-tight text-slate-900 dark:text-slate-50";
+  const subHeader = "sm:text-3xl text-3xl mb-2 text-slate-900 dark:text-slate-50";
+  const section = "my-10";
   return /* @__PURE__ */ React.createElement("div", {
     className: "flex justify-center p-8"
   }, /* @__PURE__ */ React.createElement("main", {
@@ -458,16 +459,16 @@ function AccountManagement() {
     to: "/s2ap"
   }, "Home"))), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h1", {
     className: "my-2 text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-50 sm:text-4xl"
-  }, displayName), /* @__PURE__ */ React.createElement("p", null, "This is your account page. Feel free to change any settings or", " ", /* @__PURE__ */ React.createElement("span", {
+  }, "Account"), /* @__PURE__ */ React.createElement("p", null, "This is your account page. Feel free to change any settings or", " ", /* @__PURE__ */ React.createElement("span", {
     title: "\uFF61\uFF9F( \uFF9F\u0B87\u2038\u0B87\uFF9F)\uFF9F\uFF61"
   }, "even delete your account")), /* @__PURE__ */ React.createElement("section", {
-    className: "my-8"
+    className: section
   }, /* @__PURE__ */ React.createElement("h2", {
     className: subHeader
   }, "Details"), /* @__PURE__ */ React.createElement("table", {
     className: "w-full  text-left"
   }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Spotify ID"), /* @__PURE__ */ React.createElement("th", null, "Email"))), /* @__PURE__ */ React.createElement("tbody", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("td", null, spotifyId), /* @__PURE__ */ React.createElement("td", null, email))))), /* @__PURE__ */ React.createElement("section", {
-    className: "my-8"
+    className: section
   }, /* @__PURE__ */ React.createElement("h2", {
     className: subHeader
   }, "Change settings"), /* @__PURE__ */ React.createElement(import_react6.Form, {
@@ -492,7 +493,7 @@ function AccountManagement() {
     className: "dark:highlight-white/20 my-4 flex w-full items-center justify-center rounded-lg bg-slate-900 py-2 px-4 font-semibold text-white hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 dark:bg-sky-500 dark:hover:bg-sky-400 sm:w-auto",
     type: "submit"
   }, "Update"))), /* @__PURE__ */ React.createElement("section", {
-    className: "my-8"
+    className: section
   }, /* @__PURE__ */ React.createElement("h2", {
     className: subHeader
   }, "Delete account"), /* @__PURE__ */ React.createElement(import_react6.Form, {
@@ -510,15 +511,25 @@ function AccountManagement() {
   }), /* @__PURE__ */ React.createElement("button", {
     className: "dark:highlight-white/20 flex w-full items-center justify-center rounded-lg bg-red-900 py-2 px-4 font-semibold text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 focus:ring-offset-red-50 dark:bg-rose-500 dark:hover:bg-rose-400 sm:w-auto",
     type: "submit"
-  }, "Delete")))), /* @__PURE__ */ React.createElement("section", {
+  }, "Delete")))), /* @__PURE__ */ React.createElement("div", {
     className: "my-20"
+  }, /* @__PURE__ */ React.createElement("section", {
+    className: section
   }, /* @__PURE__ */ React.createElement("h2", {
     className: subHeader
   }, "Privacy policy"), /* @__PURE__ */ React.createElement("p", {
+    className: "mb-2"
+  }, "We save your email and Spotify user name. We won't sell or share this information"), /* @__PURE__ */ React.createElement("p", null, "We would like to send you a newsletter at some point in the future. You can opt out using the form above")), /* @__PURE__ */ React.createElement("section", {
+    className: section
+  }, /* @__PURE__ */ React.createElement("h2", {
+    className: subHeader
+  }, "Attribution"), /* @__PURE__ */ React.createElement("p", {
     className: "my-2"
-  }, "We save your email and Spotify user name. We won't sell or share this information"), /* @__PURE__ */ React.createElement("p", {
-    className: "my-2"
-  }, "We would like to send you a newsletter at some point in the future. You can opt out using the form above")))));
+  }, "Data provided by Spotify"), /* @__PURE__ */ React.createElement("img", {
+    className: "my-2 w-12",
+    src: "/spotify.svg",
+    alt: ""
+  }))))));
 }
 
 // route:/Users/chadoakenfold/Documents/Code/SongToAlbumPlaylist/Code/s2ap-vercel/app/routes/s2ap/healthcheck.tsx
@@ -769,12 +780,18 @@ var determineIfAlbum = (album) => {
 function Track({ isSubmitting, current, user, playlistId }) {
   const item = current == null ? void 0 : current.item;
   const trackTitle = item == null ? void 0 : item.name;
-  const trackArtists = item ? item == null ? void 0 : item.artists.map(({ name }) => name).join(", ") : void 0;
+  const trackArtists = item ? item == null ? void 0 : item.artists.map(({ name, external_urls, id }) => /* @__PURE__ */ React.createElement("a", {
+    key: id,
+    href: external_urls.spotify,
+    className: "dark:text-sky-40 mr-2 text-sky-500 hover:text-sky-200"
+  }, name)) : void 0;
   const album = item == null ? void 0 : item.album;
   const isSongFromAlbum = determineIfAlbum(album);
   const albumTitle = album == null ? void 0 : album.name;
   const albumId = album == null ? void 0 : album.id;
   const albumTracks = album == null ? void 0 : album.total_tracks;
+  const albumUrl = album == null ? void 0 : album.external_urls.spotify;
+  console.log({ item });
   return /* @__PURE__ */ React.createElement("div", {
     className: "py-4"
   }, user && current && isSongFromAlbum ? /* @__PURE__ */ React.createElement("div", {
@@ -808,8 +825,9 @@ function Track({ isSubmitting, current, user, playlistId }) {
     type: "submit",
     className: "dark:text-sky-40 inline-block tracking-tight text-sky-500"
   }, !isSubmitting ? "Make a playlist anyway?" : null, isSubmitting ? "Creating..." : null))) : null, playlistId ? /* @__PURE__ */ React.createElement("div", {
-    className: "pb-4 font-light text-slate-900 dark:text-slate-50"
+    className: "pb-4"
   }, /* @__PURE__ */ React.createElement("a", {
+    className: "dark:text-sky-40 text-lg text-sky-500 hover:text-sky-200 sm:text-lg",
     href: `https://open.spotify.com/playlist/${playlistId}`
   }, "\u2705 ", `https://open.spotify.com/playlist/${playlistId}`)) : null, (current == null ? void 0 : current.is_playing) ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("h2", {
     className: "font-semibold text-indigo-500 dark:text-indigo-400"
@@ -824,7 +842,12 @@ function Track({ isSubmitting, current, user, playlistId }) {
     width: album.images[0].width || void 0,
     height: album.images[0].height || void 0,
     alt: item ? `Album art for ${albumTitle}` : ""
-  })) : null)) : /* @__PURE__ */ React.createElement("div", {
+  })) : null, /* @__PURE__ */ React.createElement("li", {
+    className: "max-w-3xl space-y-6"
+  }, /* @__PURE__ */ React.createElement("a", {
+    href: albumUrl,
+    className: "dark:text-sky-40 text-lg text-sky-500 hover:text-sky-200 sm:text-lg"
+  }, albumTitle)))) : /* @__PURE__ */ React.createElement("div", {
     className: "py-4"
   }, "Not listening to anything at the moment"));
 }
@@ -929,7 +952,7 @@ function Index2() {
 }
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { "version": "b55ca3ae", "entry": { "module": "/build.s2ap/entry.client-FGMXYANI.js", "imports": ["/build.s2ap/_shared/chunk-MOZPDKA5.js", "/build.s2ap/_shared/chunk-6BO74FWO.js"] }, "routes": { "root": { "id": "root", "parentId": void 0, "path": "", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/root-NLAAA47I.js", "imports": void 0, "hasAction": false, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/index": { "id": "routes/index", "parentId": "root", "path": void 0, "index": true, "caseSensitive": void 0, "module": "/build.s2ap/routes/index-I3FF5VTQ.js", "imports": void 0, "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/account/deleted": { "id": "routes/s2ap/account/deleted", "parentId": "root", "path": "s2ap/account/deleted", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/account/deleted-TXQW6WSP.js", "imports": void 0, "hasAction": false, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/account/index": { "id": "routes/s2ap/account/index", "parentId": "root", "path": "s2ap/account", "index": true, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/account/index-G6FO644L.js", "imports": ["/build.s2ap/_shared/chunk-ME5PAYV3.js", "/build.s2ap/_shared/chunk-DFG4XZEI.js", "/build.s2ap/_shared/chunk-IX3USF6X.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/admin/dashboard": { "id": "routes/s2ap/admin/dashboard", "parentId": "root", "path": "s2ap/admin/dashboard", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/admin/dashboard-VFFG3NLB.js", "imports": ["/build.s2ap/_shared/chunk-A4HVU3OZ.js", "/build.s2ap/_shared/chunk-DFG4XZEI.js", "/build.s2ap/_shared/chunk-IX3USF6X.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/authorize/spotify": { "id": "routes/s2ap/authorize/spotify", "parentId": "root", "path": "s2ap/authorize/spotify", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/authorize/spotify-VUZYJC6T.js", "imports": void 0, "hasAction": true, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/authorize/spotify.callback": { "id": "routes/s2ap/authorize/spotify.callback", "parentId": "root", "path": "s2ap/authorize/spotify/callback", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/authorize/spotify.callback-626IVBA6.js", "imports": void 0, "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/create": { "id": "routes/s2ap/create", "parentId": "root", "path": "s2ap/create", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/create-T75RJAY4.js", "imports": ["/build.s2ap/_shared/chunk-ZVJXL2KF.js", "/build.s2ap/_shared/chunk-IX3USF6X.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/healthcheck": { "id": "routes/s2ap/healthcheck", "parentId": "root", "path": "s2ap/healthcheck", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/healthcheck-ZK63EQIF.js", "imports": void 0, "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/index": { "id": "routes/s2ap/index", "parentId": "root", "path": "s2ap", "index": true, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/index-JVIQN3JA.js", "imports": ["/build.s2ap/_shared/chunk-ZVJXL2KF.js", "/build.s2ap/_shared/chunk-A4HVU3OZ.js", "/build.s2ap/_shared/chunk-ME5PAYV3.js", "/build.s2ap/_shared/chunk-IX3USF6X.js"], "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/logout": { "id": "routes/s2ap/logout", "parentId": "root", "path": "s2ap/logout", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/logout-SJ5F4HKY.js", "imports": ["/build.s2ap/_shared/chunk-ME5PAYV3.js"], "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false } }, "url": "/build.s2ap/manifest-B55CA3AE.js" };
+var assets_manifest_default = { "version": "95314bc8", "entry": { "module": "/build.s2ap/entry.client-FGMXYANI.js", "imports": ["/build.s2ap/_shared/chunk-MOZPDKA5.js", "/build.s2ap/_shared/chunk-6BO74FWO.js"] }, "routes": { "root": { "id": "root", "parentId": void 0, "path": "", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/root-WLKXH5DR.js", "imports": void 0, "hasAction": false, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/index": { "id": "routes/index", "parentId": "root", "path": void 0, "index": true, "caseSensitive": void 0, "module": "/build.s2ap/routes/index-I3FF5VTQ.js", "imports": void 0, "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/account/deleted": { "id": "routes/s2ap/account/deleted", "parentId": "root", "path": "s2ap/account/deleted", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/account/deleted-TXQW6WSP.js", "imports": void 0, "hasAction": false, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/account/index": { "id": "routes/s2ap/account/index", "parentId": "root", "path": "s2ap/account", "index": true, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/account/index-SNLXIGZQ.js", "imports": ["/build.s2ap/_shared/chunk-ME5PAYV3.js", "/build.s2ap/_shared/chunk-DFG4XZEI.js", "/build.s2ap/_shared/chunk-IX3USF6X.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/admin/dashboard": { "id": "routes/s2ap/admin/dashboard", "parentId": "root", "path": "s2ap/admin/dashboard", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/admin/dashboard-VFFG3NLB.js", "imports": ["/build.s2ap/_shared/chunk-A4HVU3OZ.js", "/build.s2ap/_shared/chunk-DFG4XZEI.js", "/build.s2ap/_shared/chunk-IX3USF6X.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/authorize/spotify": { "id": "routes/s2ap/authorize/spotify", "parentId": "root", "path": "s2ap/authorize/spotify", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/authorize/spotify-VUZYJC6T.js", "imports": void 0, "hasAction": true, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/authorize/spotify.callback": { "id": "routes/s2ap/authorize/spotify.callback", "parentId": "root", "path": "s2ap/authorize/spotify/callback", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/authorize/spotify.callback-626IVBA6.js", "imports": void 0, "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/create": { "id": "routes/s2ap/create", "parentId": "root", "path": "s2ap/create", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/create-T75RJAY4.js", "imports": ["/build.s2ap/_shared/chunk-ZVJXL2KF.js", "/build.s2ap/_shared/chunk-IX3USF6X.js"], "hasAction": true, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/healthcheck": { "id": "routes/s2ap/healthcheck", "parentId": "root", "path": "s2ap/healthcheck", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/healthcheck-ZK63EQIF.js", "imports": void 0, "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/index": { "id": "routes/s2ap/index", "parentId": "root", "path": "s2ap", "index": true, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/index-VOJE2G5P.js", "imports": ["/build.s2ap/_shared/chunk-ZVJXL2KF.js", "/build.s2ap/_shared/chunk-A4HVU3OZ.js", "/build.s2ap/_shared/chunk-ME5PAYV3.js", "/build.s2ap/_shared/chunk-IX3USF6X.js"], "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/s2ap/logout": { "id": "routes/s2ap/logout", "parentId": "root", "path": "s2ap/logout", "index": void 0, "caseSensitive": void 0, "module": "/build.s2ap/routes/s2ap/logout-SJ5F4HKY.js", "imports": ["/build.s2ap/_shared/chunk-ME5PAYV3.js"], "hasAction": false, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false } }, "url": "/build.s2ap/manifest-95314BC8.js" };
 
 // server-entry-module:@remix-run/dev/server-build
 var entry = { module: entry_server_exports };
