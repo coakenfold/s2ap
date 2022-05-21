@@ -40,13 +40,24 @@ export function Track({ isSubmitting, current, user, playlistId }: TrackInput) {
   const item = current?.item as SpotifyTrack;
   const trackTitle = item?.name;
   const trackArtists = item
-    ? item?.artists.map(({ name }) => name).join(", ")
+    ? item?.artists.map(({ name, external_urls, id }) => (
+        <a
+          key={id}
+          href={external_urls.spotify}
+          className="dark:text-sky-40 mr-2 text-sky-500 hover:text-sky-200"
+        >
+          {name}
+        </a>
+      ))
     : undefined;
   const album = item?.album;
+
   const isSongFromAlbum = determineIfAlbum(album);
   const albumTitle = album?.name;
   const albumId = album?.id;
   const albumTracks = album?.total_tracks;
+  const albumUrl = album?.external_urls.spotify;
+  console.log({ item });
   return (
     <div className="py-4">
       {user && current && isSongFromAlbum ? (
@@ -100,8 +111,11 @@ export function Track({ isSubmitting, current, user, playlistId }: TrackInput) {
         </div>
       ) : null}
       {playlistId ? (
-        <div className="pb-4 font-light text-slate-900 dark:text-slate-50">
-          <a href={`https://open.spotify.com/playlist/${playlistId}`}>
+        <div className="pb-4">
+          <a
+            className="dark:text-sky-40 text-lg text-sky-500 hover:text-sky-200 sm:text-lg"
+            href={`https://open.spotify.com/playlist/${playlistId}`}
+          >
             ✅ {`https://open.spotify.com/playlist/${playlistId}`}
           </a>
         </div>
@@ -130,6 +144,15 @@ export function Track({ isSubmitting, current, user, playlistId }: TrackInput) {
                 />
               </li>
             ) : null}
+
+            <li className="max-w-3xl space-y-6">
+              <a
+                href={albumUrl}
+                className="dark:text-sky-40 text-lg text-sky-500 hover:text-sky-200 sm:text-lg"
+              >
+                {albumTitle}
+              </a>
+            </li>
           </ul>
         </>
       ) : (
