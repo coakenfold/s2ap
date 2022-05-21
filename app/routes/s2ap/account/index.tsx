@@ -87,8 +87,8 @@ export default function AccountManagement() {
   const [checked, setChecked] = useState(account?.preferences.newsletter);
 
   const subHeader =
-    "sm:text-3xl text-3xl mb-2 font-bold tracking-tight text-slate-900 dark:text-slate-50";
-
+    "sm:text-3xl text-3xl mb-2 text-slate-900 dark:text-slate-50";
+  const section = "my-10";
   return (
     <div className="flex justify-center p-8">
       <main className="w-full max-w-3xl">
@@ -111,13 +111,13 @@ export default function AccountManagement() {
         </div>
         <div>
           <h1 className="my-2 text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-50 sm:text-4xl">
-            {displayName}
+            Account
           </h1>
           <p>
             This is your account page. Feel free to change any settings or{" "}
             <span title="｡ﾟ( ﾟஇ‸இﾟ)ﾟ｡">even delete your account</span>
           </p>
-          <section className="my-8">
+          <section className={section}>
             <h2 className={subHeader}>Details</h2>
             <table className="w-full  text-left">
               <thead>
@@ -135,7 +135,7 @@ export default function AccountManagement() {
             </table>
           </section>
 
-          <section className="my-8">
+          <section className={section}>
             <h2 className={subHeader}>Change settings</h2>
 
             <Form method="post">
@@ -163,7 +163,7 @@ export default function AccountManagement() {
             </Form>
           </section>
 
-          <section className="my-8">
+          <section className={section}>
             <h2 className={subHeader}>Delete account</h2>
 
             <Form method="post">
@@ -181,18 +181,27 @@ export default function AccountManagement() {
             </Form>
           </section>
 
-          <section className="my-20">
-            <h2 className={subHeader}>Privacy policy</h2>
+          <div className="my-20">
+            <section className={section}>
+              <h2 className={subHeader}>Privacy policy</h2>
 
-            <p className="my-2">
-              We save your email and Spotify user name. We won't sell or share
-              this information
-            </p>
-            <p className="my-2">
-              We would like to send you a newsletter at some point in the
-              future. You can opt out using the form above
-            </p>
-          </section>
+              <p className="mb-2">
+                We save your email and Spotify user name. We won't sell or share
+                this information
+              </p>
+              <p>
+                We would like to send you a newsletter at some point in the
+                future. You can opt out using the form above
+              </p>
+            </section>
+
+            <section className={section}>
+              <h2 className={subHeader}>Attribution</h2>
+
+              <p className="my-2">Data provided by Spotify</p>
+              <img className="my-2 w-12" src="/spotify.svg" alt="" />
+            </section>
+          </div>
         </div>
       </main>
     </div>
