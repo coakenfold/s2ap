@@ -198,12 +198,12 @@ export default function AccountManagement() {
             <section className={section}>
               <h2 className={subHeader}>Attribution</h2>
 
-              <p className="my-2">Data provided by Spotify</p>
+              <p className="mt-2 mb-6">Data provided by Spotify</p>
 
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                height="168px"
-                width="168px"
+                height="68px"
+                width="68px"
                 version="1.1"
                 viewBox="0 0 168 168"
               >
