@@ -5,7 +5,6 @@ import { Form, useLoaderData, Link } from "@remix-run/react";
 import { spotifyStrategy } from "~/models/auth.server";
 
 import { logout } from "~/session.server";
-import { MiniForm } from "~/components/MiniForm";
 
 import { getUserByEmail } from "~/models/user.server";
 import type { User } from "~/models/user.server";
