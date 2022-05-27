@@ -57,7 +57,7 @@ export function Track({ isSubmitting, current, user, playlistId }: TrackInput) {
   const albumId = album?.id;
   const albumTracks = album?.total_tracks;
   const albumUrl = album?.external_urls.spotify;
-  console.log({ item });
+
   return (
     <div className="py-4">
       {user && current && isSongFromAlbum ? (
