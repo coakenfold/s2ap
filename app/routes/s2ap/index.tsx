@@ -1,13 +1,16 @@
+import { useLoaderData, useTransition, Link } from "@remix-run/react";
+import { redirect } from "@remix-run/node";
 import type { LoaderFunction } from "@remix-run/node";
-import { Form, useLoaderData, useTransition, Link } from "@remix-run/react";
-import type { Session } from "remix-auth-spotify";
-import { spotifyStrategy } from "~/models/auth.server";
-import { logout } from "~/session.server";
+import type { Session, User } from "remix-auth-spotify";
 import type { CurrentlyPlaying } from "spotify-types";
 
+import { authentication } from "~/models/auth.server";
+import { logout } from "~/session.server";
+// import { getUserPrefs } from "~/cookies";
 import { currentlyPlaying } from "~/service/spotify.api.server";
 import { Track } from "~/components/track";
 import { MiniForm } from "~/components/MiniForm";
+
 export interface LoaderOutput {
   session: Session;
   current: CurrentlyPlaying | null;
@@ -15,7 +18,12 @@ export interface LoaderOutput {
   build: string | undefined;
 }
 export const loader: LoaderFunction = async ({ request }) => {
+  const { spotifyStrategy } = await authentication(request);
   const session = await spotifyStrategy.getSession(request);
+
+  if (!session || !session?.user) {
+    return redirect("/s2ap/login");
+  }
   const build = process.env.BUILD;
   const url = new URL(request.url);
   const playlistId = url.searchParams.get("playlistId");
@@ -28,6 +36,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     return await logout(request);
   }
 
+  // console.log("cookie", getUserPrefs(request));
   return {
     session,
     current,
@@ -38,7 +47,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export default function Index() {
   const { session, current, playlistId, build } = useLoaderData<LoaderOutput>();
-  const user = session?.user;
+  const user = session.user as User;
   const transition = useTransition();
   const isSubmitting = transition.state === "submitting";
 
@@ -52,75 +61,59 @@ export default function Index() {
           >
             S2ap
           </h1>
-          {user ? (
-            <div className="flex items-center space-x-4">
-              <Link
-                className="dark:text-sky-40 tracking-tight text-sky-500 hover:text-sky-200"
-                to={"/s2ap"}
-              >
-                Reload
-              </Link>
 
-              <Link
-                className="dark:text-sky-40 tracking-tight text-sky-500 hover:text-sky-200"
-                to={"/s2ap/account"}
-              >
-                Account
-              </Link>
+          <div className="flex items-center space-x-4">
+            <Link
+              className="dark:text-sky-40 tracking-tight text-sky-500 hover:text-sky-200"
+              to={"/s2ap"}
+            >
+              Reload
+            </Link>
 
-              <MiniForm action="/s2ap/logout">
-                <button
-                  className="dark:text-sky-40 tracking-tight text-sky-500 hover:text-sky-200"
-                  type="submit"
-                >
-                  Logout
-                </button>
-              </MiniForm>
-            </div>
-          ) : (
-            ""
-          )}{" "}
+            <Link
+              className="dark:text-sky-40 tracking-tight text-sky-500 hover:text-sky-200"
+              to={"/s2ap/account"}
+            >
+              Account
+            </Link>
+
+            <MiniForm action="/s2ap/logout">
+              <button
+                className="dark:text-sky-40 tracking-tight text-sky-500 hover:text-sky-200"
+                type="submit"
+              >
+                Logout
+              </button>
+            </MiniForm>
+          </div>
         </div>
-        {!user ? (
-          <Form action="/s2ap/authorize/spotify" method="post">
-            <button className="dark:highlight-white/20 my-2 flex h-14 w-full items-center justify-center rounded-lg bg-slate-900 px-6 text-xl font-semibold text-white hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 dark:bg-sky-500 dark:hover:bg-sky-400 sm:w-auto">
-              Log in with Spotify
-            </button>
-          </Form>
+
+        <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50 sm:text-4xl ">
+          Hello <strong className="font-extrabold">{user.name}!</strong>
+          👋
+        </h1>
+        {current?.is_playing ? (
+          <Track
+            current={current}
+            isSubmitting={isSubmitting}
+            user={user}
+            playlistId={playlistId}
+          />
         ) : (
-          <>
-            <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50 sm:text-4xl ">
-              Hello{" "}
-              {user ? (
-                <strong className="font-extrabold">{user.name}!</strong>
-              ) : (
-                ""
-              )}{" "}
-              👋
-            </h1>
-            {current?.is_playing ? (
-              <Track
-                current={current}
-                isSubmitting={isSubmitting}
-                user={user}
-                playlistId={playlistId}
-              />
-            ) : (
-              <div>
-                <p className="py-8 text-slate-900 dark:text-slate-50">
-                  🙉 Play something in Spotify and then{" "}
-                  <a
-                    href="/s2ap"
-                    className="dark:text-sky-40 font-bold tracking-tight text-sky-500 "
-                  >
-                    reload
-                  </a>{" "}
-                  this page
-                </p>
-              </div>
-            )}
-          </>
+          <div>
+            <p className="py-8 text-slate-900 dark:text-slate-50">
+              🙉 Play something in Spotify and then{" "}
+              <a
+                href="/s2ap"
+                className="dark:text-sky-40 font-bold tracking-tight text-sky-500 "
+              >
+                reload
+              </a>{" "}
+              this page
+            </p>
+          </div>
         )}
+
         {build ? (
           <small className="mt-16 mb-8 block bg-slate-900 text-right text-xs text-slate-800 ">
             {build}
