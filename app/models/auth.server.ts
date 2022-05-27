@@ -31,7 +31,7 @@ export const authentication = async (request: Request) => {
     "playlist-read-collaborative",
     "playlist-modify-public",
     "playlist-modify-private",
-    "user-read-email", // TODO: REMOVE, MAKE OPTIONAL
+    // "user-read-email", // TODO: REMOVE, MAKE OPTIONAL
   ];
 
   // if (canRequestEmail) {
@@ -52,7 +52,7 @@ export const authentication = async (request: Request) => {
       let user = await getUserBySpotifyId(profile.id);
       if (!user) {
         user = await createUser({
-          email: profile.__json.email,
+          email: profile?.__json?.email,
           displayName: profile.displayName,
           spotifyId: profile.id,
         });

@@ -13,7 +13,7 @@ export interface CreateUserInput {
   spotifyId: User["spotifyId"];
 }
 export async function createUser({
-  email = undefined,
+  email = "",
   displayName,
   spotifyId,
 }: CreateUserInput) {
