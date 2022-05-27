@@ -2,7 +2,7 @@ import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { Form, useLoaderData, Link } from "@remix-run/react";
 
-import { spotifyStrategy } from "~/models/auth.server";
+import { authentication } from "~/models/auth.server";
 
 import { logout } from "~/session.server";
 
@@ -19,6 +19,7 @@ import type { Account } from "~/models/account.server";
 import { useState } from "react";
 
 export const action: ActionFunction = async ({ request }) => {
+  const { spotifyStrategy } = await authentication(request);
   const session = await spotifyStrategy.getSession(request);
   if (!session) {
     return redirect("/s2ap#noSession");
@@ -62,6 +63,7 @@ export interface LoaderOutput {
   account: Account;
 }
 export const loader: LoaderFunction = async ({ request }) => {
+  const { spotifyStrategy } = await authentication(request);
   const session = await spotifyStrategy.getSession(request);
 
   if (!session?.user) {

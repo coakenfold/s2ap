@@ -2,7 +2,7 @@ import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 
-import { spotifyStrategy } from "~/models/auth.server";
+import { authentication } from "~/models/auth.server";
 
 import { MiniForm } from "~/components/MiniForm";
 import {
@@ -19,6 +19,7 @@ export interface LoaderOutput {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
+  const { spotifyStrategy } = await authentication(request);
   const session = await spotifyStrategy.getSession(request);
 
   if (session?.user?.id !== "c_oak") {
@@ -31,6 +32,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export const DASHBOARD_URL = "/s2ap/admin/dashboard";
 export const action: ActionFunction = async ({ request }) => {
+  const { spotifyStrategy } = await authentication(request);
   const session = await spotifyStrategy.getSession(request);
   if (session && session?.user?.id === "c_oak") {
     const form = await request.formData();
