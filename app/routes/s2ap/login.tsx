@@ -1,27 +1,8 @@
 import { /*redirect,*/ json } from "@remix-run/node";
 import { Form, useLoaderData } from "@remix-run/react";
-import { userPrefs } from "~/cookies";
+import { getUserPrefs } from "~/cookies";
 
 import type { LoaderFunction } from "@remix-run/node";
-
-// import type { ActionFunction } from "@remix-run/node";
-// export const action: ActionFunction = async ({ request }) => {
-//   const cookieHeader = request.headers.get("Cookie");
-//   const cookie = (await userPrefs.parse(cookieHeader)) || {};
-
-//   const form = await request.formData();
-//   const formCanRequestEmail = !!(form.get("canRequestEmail") as
-//     | string
-//     | undefined);
-
-//   cookie.canRequestEmail = formCanRequestEmail;
-
-//   return redirect(`/s2ap/authorize/spotify`, {
-//     headers: {
-//       "Set-Cookie": await userPrefs.serialize(cookie),
-//     },
-//   });
-// };
 
 export interface LoaderOutput {
   build: string | undefined;
@@ -29,9 +10,13 @@ export interface LoaderOutput {
 }
 export const loader: LoaderFunction = async ({ request }) => {
   const build = process.env.BUILD;
-  const cookieHeader = request.headers.get("Cookie");
-  const cookie = (await userPrefs.parse(cookieHeader)) || {};
-  return json({ build, canRequestEmail: cookie.canRequestEmail });
+  const cookie = await getUserPrefs(request);
+
+  return json({
+    build,
+    canRequestEmail:
+      cookie.canRequestEmail === undefined ? true : cookie.canRequestEmail,
+  });
 };
 export default function Index() {
   const { build, canRequestEmail } = useLoaderData<LoaderOutput>();
