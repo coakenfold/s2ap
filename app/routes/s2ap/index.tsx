@@ -1,12 +1,12 @@
 import { useLoaderData, useTransition, Link } from "@remix-run/react";
 import { redirect } from "@remix-run/node";
+
 import type { LoaderFunction } from "@remix-run/node";
 import type { Session, User } from "remix-auth-spotify";
 import type { CurrentlyPlaying } from "spotify-types";
 
 import { authentication } from "~/models/auth.server";
 import { logout } from "~/session.server";
-// import { getUserPrefs } from "~/cookies";
 import { currentlyPlaying } from "~/service/spotify.api.server";
 import { Track } from "~/components/track";
 import { MiniForm } from "~/components/MiniForm";
@@ -33,10 +33,9 @@ export const loader: LoaderFunction = async ({ request }) => {
     : null;
 
   if (current?.error?.status === 401) {
-    return await logout(request);
+    return await logout({ request });
   }
 
-  // console.log("cookie", getUserPrefs(request));
   return {
     session,
     current,
