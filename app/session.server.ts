@@ -1,6 +1,8 @@
 import { createCookieSessionStorage, redirect } from "@remix-run/node";
 import invariant from "tiny-invariant";
 
+import { userPrefs, userPrefsDefault } from "~/cookies";
+
 invariant(process.env.SESSION_SECRET, "SESSION_SECRET must be set");
 
 export const sessionStorage = createCookieSessionStorage({
@@ -19,11 +21,26 @@ export const { getSession, commitSession, destroySession } = sessionStorage;
 function getUserSession(request: Request) {
   return sessionStorage.getSession(request.headers.get("Cookie"));
 }
-export async function logout(request: Request, url: string = "/s2ap") {
+
+export interface LogoutInput {
+  request: Request;
+  url?: string;
+  shouldDeleteUserPrefs?: boolean;
+}
+export async function logout({
+  request,
+  url = "/s2ap",
+  shouldDeleteUserPrefs = false,
+}: LogoutInput) {
   const session = await getUserSession(request);
+  const headers = new Headers();
+  headers.append("Set-Cookie", await sessionStorage.destroySession(session));
+  if (shouldDeleteUserPrefs) {
+    headers.append("Set-Cookie", await userPrefs.serialize(userPrefsDefault));
+  }
+
+  // "Set-Cookie": await userPrefs.serialize(cookie),
   return redirect(url, {
-    headers: {
-      "Set-Cookie": await sessionStorage.destroySession(session),
-    },
+    headers,
   });
 }
