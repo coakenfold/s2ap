@@ -196,8 +196,8 @@ export default function AccountManagement() {
               <h2 className={subHeader}>Privacy policy</h2>
 
               <p className="mb-2">
-                We save your email and Spotify user name. We won't sell or share
-                this information
+                We save your Spotify user name and (if you give us permission)
+                your email. We won't sell or share this information
               </p>
               <p>
                 We would like to send you a newsletter at some point in the
