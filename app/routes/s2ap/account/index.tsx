@@ -2,12 +2,14 @@ import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { Form, useLoaderData, Link } from "@remix-run/react";
 
-import { spotifyStrategy } from "~/models/auth.server";
+import { authentication } from "~/models/auth.server";
 
 import { logout } from "~/session.server";
-import { MiniForm } from "~/components/MiniForm";
 
-import { getUserByEmail } from "~/models/user.server";
+import {
+  getUserBySpotifyId,
+  deleteUserBySpotifyId,
+} from "~/models/user.server";
 import type { User } from "~/models/user.server";
 
 import {
@@ -20,13 +22,15 @@ import type { Account } from "~/models/account.server";
 import { useState } from "react";
 
 export const action: ActionFunction = async ({ request }) => {
+  const { spotifyStrategy } = await authentication(request);
   const session = await spotifyStrategy.getSession(request);
   if (!session) {
     return redirect("/s2ap#noSession");
   }
   const sessionUser = session?.user as User;
-  const user = await getUserByEmail(sessionUser.email);
-  const account = await getAccountBySpotifyId(user?.spotifyId as string);
+
+  const user = await getUserBySpotifyId(sessionUser.id);
+  const account = await getAccountBySpotifyId(sessionUser.id);
 
   // Ensure the user is editing their own data
   if (session?.user?.id !== user?.spotifyId) {
@@ -41,8 +45,13 @@ export const action: ActionFunction = async ({ request }) => {
 
   if (formTarget === "delete") {
     const accountDelete = await deleteAccountBySpotifyId(account.spotifyId);
-    console.log("accountDelete", accountDelete);
-    return logout(request, "/s2ap/account/deleted");
+    const userDelete = await deleteUserBySpotifyId(account.spotifyId);
+    console.log("Delete results:", { accountDelete, userDelete });
+    return logout({
+      request,
+      url: "/s2ap/account/deleted",
+      shouldDeleteUserPrefs: true,
+    });
   }
   if (formTarget === "settings") {
     const formNewsletter = form.get("newsletter");
@@ -63,18 +72,20 @@ export interface LoaderOutput {
   account: Account;
 }
 export const loader: LoaderFunction = async ({ request }) => {
+  const { spotifyStrategy } = await authentication(request);
   const session = await spotifyStrategy.getSession(request);
 
   if (!session?.user) {
     return redirect("/s2ap");
   }
 
-  const user = await getUserByEmail(session?.user?.email);
+  const spotifyId = session?.user?.id;
+  const user = await getUserBySpotifyId(spotifyId);
   if (!user) {
     return redirect("/s2ap");
   }
 
-  const account = await getAccountBySpotifyId(user.spotifyId);
+  const account = await getAccountBySpotifyId(spotifyId);
 
   if (!account) {
     return redirect("/s2ap");
@@ -83,7 +94,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 export default function AccountManagement() {
   const { user, account } = useLoaderData<LoaderOutput>();
-  const { spotifyId, displayName, email } = user;
+  const { spotifyId, email } = user;
   const [checked, setChecked] = useState(account?.preferences.newsletter);
 
   const subHeader =
@@ -113,10 +124,6 @@ export default function AccountManagement() {
           <h1 className="my-2 text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-50 sm:text-4xl">
             Account
           </h1>
-          <p>
-            This is your account page. Feel free to change any settings or{" "}
-            <span title="｡ﾟ( ﾟஇ‸இﾟ)ﾟ｡">even delete your account</span>
-          </p>
           <section className={section}>
             <h2 className={subHeader}>Details</h2>
             <table className="w-full  text-left">
@@ -129,39 +136,42 @@ export default function AccountManagement() {
               <tbody>
                 <tr>
                   <td>{spotifyId}</td>
-                  <td>{email}</td>
+                  <td>{email ? email : "Not shared with S2ap"}</td>
                 </tr>
               </tbody>
             </table>
           </section>
+          {email ? (
+            <section className={section}>
+              <h2 className={subHeader}>Change settings</h2>
 
-          <section className={section}>
-            <h2 className={subHeader}>Change settings</h2>
-
-            <Form method="post">
-              <fieldset className="my-2 ">
-                <input type="hidden" name="formTarget" value="settings" />
-                <input
-                  type="checkbox"
-                  name="newsletter"
-                  id="newsletter"
-                  defaultChecked={checked}
-                  onClick={() => {
-                    setChecked(!checked);
-                  }}
-                />{" "}
-                <label htmlFor="newsletter">
-                  I'll accept (the occasional) email from S2ap
-                </label>
-              </fieldset>
-              <button
-                className="dark:highlight-white/20 my-4 flex w-full items-center justify-center rounded-lg bg-slate-900 py-2 px-4 font-semibold text-white hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 dark:bg-sky-500 dark:hover:bg-sky-400 sm:w-auto"
-                type="submit"
-              >
-                Update
-              </button>
-            </Form>
-          </section>
+              <Form method="post">
+                <fieldset className="my-2 ">
+                  <input type="hidden" name="formTarget" value="settings" />
+                  <input
+                    type="checkbox"
+                    name="newsletter"
+                    id="newsletter"
+                    defaultChecked={checked}
+                    onClick={() => {
+                      setChecked(!checked);
+                    }}
+                  />{" "}
+                  <label htmlFor="newsletter">
+                    I'll accept (the occasional) email from S2ap
+                  </label>
+                </fieldset>
+                <button
+                  className="dark:highlight-white/20 my-4 flex w-full items-center justify-center rounded-lg bg-slate-900 py-2 px-4 font-semibold text-white hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 dark:bg-sky-500 dark:hover:bg-sky-400 sm:w-auto"
+                  type="submit"
+                >
+                  Update
+                </button>
+              </Form>
+            </section>
+          ) : (
+            <></>
+          )}
 
           <section className={section}>
             <h2 className={subHeader}>Delete account</h2>

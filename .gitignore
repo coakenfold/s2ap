@@ -6,6 +6,7 @@ node_modules
 public/build
 public/build.s2ap
 api/_build
+api/_build.s2ap
 build
 build.s2ap
 

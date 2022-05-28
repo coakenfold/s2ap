@@ -1,7 +1,7 @@
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import type { Session } from "remix-auth-spotify";
-import { spotifyStrategy } from "~/models/auth.server";
+import { authentication } from "~/models/auth.server";
 
 import type { SimplifiedTrack, CurrentlyPlaying } from "spotify-types";
 
@@ -18,6 +18,7 @@ export interface LoaderOutput {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
+  const { spotifyStrategy } = await authentication(request);
   const session = await spotifyStrategy.getSession(request);
   let current = {};
   if (session?.user) {
@@ -88,6 +89,7 @@ const createAlbumPlaylistFromCurrentTrack = async ({
 };
 
 export const action: ActionFunction = async ({ request }) => {
+  const { spotifyStrategy } = await authentication(request);
   const session = await spotifyStrategy.getSession(request);
   if (session) {
     const form = await request.formData();
