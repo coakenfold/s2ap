@@ -2,12 +2,16 @@ import { Authenticator } from "remix-auth";
 import { SpotifyStrategy } from "remix-auth-spotify";
 import { sessionStorage } from "~/session.server";
 import invariant from "tiny-invariant";
-import { getUserBySpotifyId, createUser } from "~/models/user.server";
+import {
+  getUserBySpotifyId,
+  createUser,
+  updateUserEmail,
+} from "~/models/user.server";
 import {
   createAccountWithSpotifyId,
   getAccountBySpotifyId,
 } from "~/models/account.server";
-import { userPrefs } from "~/cookies";
+import { getUserPrefs } from "~/cookies";
 
 invariant(process.env.SPOTIFY_CLIENT_ID, "Missing SPOTIFY_CLIENT_ID env");
 invariant(
@@ -17,13 +21,8 @@ invariant(
 invariant(process.env.SPOTIFY_CALLBACK_URL, "Missing SPOTIFY_CALLBACK_URL env");
 
 export const authentication = async (request: Request) => {
-  const cookieHeader = request.headers.get("Cookie");
-  const cookie = (await userPrefs.parse(cookieHeader)) || {};
-  console.log(
-    "CHAD_CHAD second param should have a value",
-    cookie,
-    cookie.canRequestEmail
-  );
+  const cookie = await getUserPrefs(request);
+
   // See https://developer.spotify.com/documentation/general/guides/authorization/scopes
   const scopes = [
     "user-read-currently-playing",
@@ -31,13 +30,11 @@ export const authentication = async (request: Request) => {
     "playlist-read-collaborative",
     "playlist-modify-public",
     "playlist-modify-private",
-    // "user-read-email", // TODO: REMOVE, MAKE OPTIONAL
   ];
 
-  // if (canRequestEmail) {
-  //   scopes.push("user-read-email");
-  //   console.log("!!!! udpatedin scope !!!!", scopes);
-  // }
+  if (cookie.canRequestEmail) {
+    scopes.push("user-read-email");
+  }
 
   const spotifyStrategy = new SpotifyStrategy(
     {
@@ -54,6 +51,11 @@ export const authentication = async (request: Request) => {
         user = await createUser({
           email: profile?.__json?.email,
           displayName: profile.displayName,
+          spotifyId: profile.id,
+        });
+      } else {
+        user = await updateUserEmail({
+          email: profile?.__json?.email,
           spotifyId: profile.id,
         });
       }
