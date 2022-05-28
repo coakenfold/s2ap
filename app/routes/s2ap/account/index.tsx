@@ -6,7 +6,10 @@ import { authentication } from "~/models/auth.server";
 
 import { logout } from "~/session.server";
 
-import { getUserBySpotifyId } from "~/models/user.server";
+import {
+  getUserBySpotifyId,
+  deleteUserBySpotifyId,
+} from "~/models/user.server";
 import type { User } from "~/models/user.server";
 
 import {
@@ -42,8 +45,13 @@ export const action: ActionFunction = async ({ request }) => {
 
   if (formTarget === "delete") {
     const accountDelete = await deleteAccountBySpotifyId(account.spotifyId);
-    console.log("accountDelete", accountDelete);
-    return logout(request, "/s2ap/account/deleted");
+    const userDelete = await deleteUserBySpotifyId(account.spotifyId);
+    console.log("Delete results:", { accountDelete, userDelete });
+    return logout({
+      request,
+      url: "/s2ap/account/deleted",
+      shouldDeleteUserPrefs: true,
+    });
   }
   if (formTarget === "settings") {
     const formNewsletter = form.get("newsletter");
