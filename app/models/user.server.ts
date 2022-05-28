@@ -25,6 +25,19 @@ export async function createUser({
     },
   });
 }
+export interface UpdateUserBySpotifyIdInput {
+  spotifyId: string;
+  email: User["email"];
+}
+export async function updateUserEmail({
+  spotifyId,
+  email = "",
+}: UpdateUserBySpotifyIdInput) {
+  return db.user.update({
+    where: { spotifyId },
+    data: { email },
+  });
+}
 
 export async function getUserBySpotifyId(spotifyId: User["spotifyId"]) {
   return db.user.findUnique({ where: { spotifyId } });
