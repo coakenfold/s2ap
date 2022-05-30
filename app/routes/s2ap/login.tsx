@@ -7,19 +7,23 @@ import type { LoaderFunction } from "@remix-run/node";
 export interface LoaderOutput {
   build: string | undefined;
   canRequestEmail: boolean;
+  spotifyClientId: string;
 }
 export const loader: LoaderFunction = async ({ request }) => {
   const build = process.env.BUILD;
+  const spotifyClientId = process.env.SPOTIFY_CLIENT_ID;
   const cookie = await getUserPrefs(request);
 
   return json({
     build,
+    spotifyClientId,
     canRequestEmail:
       cookie.canRequestEmail === undefined ? true : cookie.canRequestEmail,
   });
 };
 export default function Index() {
-  const { build, canRequestEmail } = useLoaderData<LoaderOutput>();
+  const { spotifyClientId, build, canRequestEmail } =
+    useLoaderData<LoaderOutput>();
   return (
     <div className="flex justify-center p-8">
       <main className="w-full max-w-3xl">
@@ -44,7 +48,7 @@ export default function Index() {
         <div>
           {build ? (
             <small className="mt-16 mb-8 block bg-slate-900 text-right text-xs text-slate-800 ">
-              {build}
+              {build} - {spotifyClientId}
             </small>
           ) : null}
         </div>
