@@ -30,16 +30,16 @@ export default function Index() {
           S2ap
         </h1>
         <Form method="post" action="/s2ap/authorize/spotify">
+          <button className="dark:highlight-white/20 my-2 flex h-14 w-full items-center justify-center rounded-lg bg-slate-900 px-6 text-xl font-semibold text-white hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 dark:bg-sky-500 dark:hover:bg-sky-400 sm:w-auto">
+            Log in with Spotify
+          </button>
           <input
             type="checkbox"
             id="canRequestEmail"
             name="canRequestEmail"
             defaultChecked={canRequestEmail}
           />
-          <label htmlFor="canRequestEmail">Share my email with S2Ap</label>
-          <button className="dark:highlight-white/20 my-2 flex h-14 w-full items-center justify-center rounded-lg bg-slate-900 px-6 text-xl font-semibold text-white hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 dark:bg-sky-500 dark:hover:bg-sky-400 sm:w-auto">
-            Log in with Spotify
-          </button>
+          <label htmlFor="canRequestEmail"> share email with S2Ap</label>
         </Form>
         <div>
           {build ? (
