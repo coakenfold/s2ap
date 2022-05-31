@@ -1,8 +1,24 @@
-import { /*redirect,*/ json } from "@remix-run/node";
-import { Form, useLoaderData } from "@remix-run/react";
-import { getUserPrefs } from "~/cookies";
+import { redirect, json } from "@remix-run/node";
+import { Form, useLoaderData, useSubmit } from "@remix-run/react";
+import { getUserPrefs, userPrefs } from "~/cookies";
 
-import type { LoaderFunction } from "@remix-run/node";
+import type { LoaderFunction, ActionFunction } from "@remix-run/node";
+
+export const action: ActionFunction = async ({ request }) => {
+  const cookie = await getUserPrefs(request);
+
+  const form = await request.formData();
+  const formCanRequestEmail = !!(form.get("canRequestEmail") as
+    | string
+    | undefined);
+
+  cookie.canRequestEmail = formCanRequestEmail;
+  return redirect(`/s2ap/login`, {
+    headers: {
+      "Set-Cookie": await userPrefs.serialize(cookie),
+    },
+  });
+};
 
 export interface LoaderOutput {
   build: string | undefined;
@@ -20,6 +36,19 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 export default function Index() {
   const { build, canRequestEmail } = useLoaderData<LoaderOutput>();
+  const submit = useSubmit();
+  function handleChange(event: {
+    currentTarget:
+      | FormData
+      | HTMLFormElement
+      | HTMLButtonElement
+      | HTMLInputElement
+      | URLSearchParams
+      | { [name: string]: string }
+      | null;
+  }) {
+    submit(event.currentTarget, { replace: true });
+  }
   return (
     <div className="flex justify-center p-8">
       <main className="w-full max-w-3xl">
@@ -33,6 +62,8 @@ export default function Index() {
           <button className="dark:highlight-white/20 my-2 flex h-14 w-full items-center justify-center rounded-lg bg-slate-900 px-6 text-xl font-semibold text-white hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 dark:bg-sky-500 dark:hover:bg-sky-400 sm:w-auto">
             Log in with Spotify
           </button>
+        </Form>
+        <Form method="post" action="/s2ap/login" onChange={handleChange}>
           <input
             type="checkbox"
             id="canRequestEmail"
